@@ -1,7 +1,7 @@
 @jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYyNzY4Mjc4LCJleHAiOjE3NjUzNjAyNzh9.bJtyKp35de4zMbY6kQoSIH-K203MIi4YLZcvZHuE3tw
 
 ### Connexion utilisateur
-POST http://localhost:1337/api/auth/local
+POST http://localhost:3000/api/auth/local
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### Créer une recette 0
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -25,7 +25,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 1
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -41,7 +41,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 2
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -57,7 +57,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 3
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -73,7 +73,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 4
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -89,7 +89,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 5
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -105,7 +105,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 6
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -121,7 +121,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 7
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -137,7 +137,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 8
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -153,7 +153,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 9
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -168,7 +168,7 @@ Authorization: Bearer {{jwt}}
 }
 
 ### Créer une recette 10
-POST http://localhost:1337/api/recipes
+POST http://localhost:3000/api/recipes
 Content-Type: application/json
 Authorization: Bearer {{jwt}}
 
@@ -182,3 +182,42 @@ Authorization: Bearer {{jwt}}
     "description": "Le grand classique français : bœuf mijoté au vin rouge avec carottes et oignons."
   }
 }
+
+### Créer une recette 10
+POST http://localhost:3000/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "test",
+    "preparation_time": 150,
+    "dificulty": 5,
+    "budget": 5,
+    "description": "ceci et le test"
+  }
+}
+
+### Récupérer toutes les recettes
+GET http://localhost:3000/api/recipes
+
+### Récupérer une recette par ID
+GET http://localhost:3000/api/recipes/d364b6c2-2319-488b-aa0e-cd7b090c944b
+
+### Mettre à jour une recette
+PUT http://localhost:3000/api/recipes/d364b6c2-2319-488b-aa0e-cd7b090c944b
+Content-Type: application/json
+
+{
+  "data": {
+    "Title": "test modifier",
+    "preparation_time": 25,
+    "dificulty": 2,
+    "budget": 4,
+    "description": "Recette mise à jour test"
+  }
+}
+
+### Mettre à jour une recette
+DELETE http://localhost:3000/api/recipes/d364b6c2-2319-488b-aa0e-cd7b090c944b
