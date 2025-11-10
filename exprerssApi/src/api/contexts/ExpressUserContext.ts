@@ -1,4 +1,4 @@
-import { UserContext } from '../../../../core/domain/common/interfaces';
+import { UserContext } from '../../core/domain/common/interfaces';
 
 export class ExpressUserContext implements UserContext {
   constructor(
