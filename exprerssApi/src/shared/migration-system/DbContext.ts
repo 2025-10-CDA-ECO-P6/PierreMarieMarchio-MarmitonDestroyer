@@ -13,9 +13,7 @@ export abstract class DbContext {
   }
 
   async connect(): Promise<Database> {
-    if (!this.db) {
-      this.db = await open({ filename: this.dbPath, driver: sqlite3.Database });
-    }
+    this.db ??= await open({ filename: this.dbPath, driver: sqlite3.Database });
     return this.db;
   }
 
