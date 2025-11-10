@@ -1,10 +1,33 @@
 import express from 'express';
 import routes from './routes';
-import { bootstrap } from './app-bootstrap';
+import { registerComonInfrastructureService } from '../infrastructure/common/ServiceRegister';
+import { registerAuthInfrastructureService } from '../infrastructure/auth/ServiceRegister';
+import { registerRecipeDataInfrastructureService } from '../infrastructure/recipe-data/ServiceRegister';
+import { DIContainer } from '../shared/dependency-injection/DIContainer';
+import { registerCommonApplicationServices } from '../core/application/common/ServiceRegister';
+import { registerAuthApplicationServices } from '../core/application/features/auth/ServiceRegister';
+import { registerRecipeApplicationServices } from '../core/application/features/recipes/ServiceRegister';
+import { AppDbContext } from '../infrastructure/common/persistence/contexts/AppDbContext';
+import { RecipeDbContext } from '../infrastructure/recipe-data/persistence/contexts/RecipeDbContext';
+
+export const container = new DIContainer();
+
+registerComonInfrastructureService(container);
+registerAuthInfrastructureService(container);
+registerRecipeDataInfrastructureService(container);
+registerCommonApplicationServices(container);
+registerAuthApplicationServices(container);
+registerRecipeApplicationServices(container);
+
+const DBInit = async () => {
+  const appDbContext = container.inject<AppDbContext>('AppDbContext');
+  const RecipeDbContext = container.inject<RecipeDbContext>('RecipeDbContext');
+  await appDbContext.migrateAsync();
+};
+
+DBInit();
 
 const app = express();
-
-bootstrap();
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

@@ -1,13 +1,23 @@
-@jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYyNzY4Mjc4LCJleHAiOjE3NjUzNjAyNzh9.bJtyKp35de4zMbY6kQoSIH-K203MIi4YLZcvZHuE3tw
+@jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNDU2YzE1ZC1iMjA0LTRjN2YtYWI0Ny1kYTk2MTZjOTQxYmYiLCJpYXQiOjE3NjI4OTc0NDMsImV4cCI6MTc2MjkwMTA0M30.zdFA9vr1xXkVmAVT_5tuphb7cTBS2jujJkfAErxY0L8
 
 ### Connexion utilisateur
-POST http://localhost:3000/api/auth/local
+POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-  "identifier": "admin@admin.com",
-  "password": "Adm1n@"
+  "data": {
+    "email": "admin@admin.com",
+    "password": "admin"
+  }
 }
+
+### Récupérer toutes les recettes
+GET http://localhost:3000/api/recipes
+Authorization: Bearer {{jwt}}
+
+### Récupérer une recette par ID
+GET http://localhost:3000/api/recipes/d364b6c2-2319-488b-aa0e-cd7b090c944b
+Authorization: Bearer {{jwt}}
 
 ### Créer une recette 0
 POST http://localhost:3000/api/recipes
@@ -199,15 +209,11 @@ Authorization: Bearer {{jwt}}
   }
 }
 
-### Récupérer toutes les recettes
-GET http://localhost:3000/api/recipes
-
-### Récupérer une recette par ID
-GET http://localhost:3000/api/recipes/d364b6c2-2319-488b-aa0e-cd7b090c944b
-
 ### Mettre à jour une recette
 PUT http://localhost:3000/api/recipes/d364b6c2-2319-488b-aa0e-cd7b090c944b
 Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
 
 {
   "data": {
@@ -219,5 +225,36 @@ Content-Type: application/json
   }
 }
 
-### Mettre à jour une recette
+### Suprimer à jour une recette
 DELETE http://localhost:3000/api/recipes/d364b6c2-2319-488b-aa0e-cd7b090c944b
+Authorization: Bearer {{jwt}}
+
+
+
+### Suprimer un utilisateur
+DELETE http://localhost:3000/api/users/616df17d-d511-4224-a7bd-9455112eda7b
+Authorization: Bearer {{jwt}}
+
+
+### Register
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "data": {
+    "name": "test",
+    "email": "test@test.com",
+    "password": "test@01"
+  }
+}
+
+### Login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "data": {
+    "email": "test@test.com",
+    "password": "test@01"
+  }
+}

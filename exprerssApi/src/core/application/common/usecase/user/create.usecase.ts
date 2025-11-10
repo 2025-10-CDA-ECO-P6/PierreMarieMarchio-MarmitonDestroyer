@@ -1,0 +1,46 @@
+import { randomUUID } from 'node:crypto';
+import { User } from '../../../../domain/common/entities';
+import bcrypt from 'bcryptjs';
+import { UserFullDTO } from '../../dto';
+import { UseCase } from '../../interfaces';
+import { UserRepository } from '../../../../domain/common/interfaces';
+
+export interface CreateUserRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface CreateUserResponse {
+  data: UserFullDTO;
+}
+
+export class CreateUserUseCase
+  implements UseCase<CreateUserRequest, CreateUserResponse>
+{
+  constructor(private readonly userRepo: UserRepository) {}
+
+  async execute(user: CreateUserRequest): Promise<CreateUserResponse> {
+    const now = new Date();
+    const hashpassword = await bcrypt.hash(user.password, 10);
+
+    const newUser = new User(
+      randomUUID(),
+      user.name,
+      user.email,
+      hashpassword,
+      now,
+      now,
+    );
+
+    await this.userRepo.add(newUser);
+
+    return {
+      data: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      },
+    };
+  }
+}

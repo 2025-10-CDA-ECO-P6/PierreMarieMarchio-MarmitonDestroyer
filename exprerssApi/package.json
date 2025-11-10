@@ -15,19 +15,27 @@
   "type": "commonjs",
   "devDependencies": {
     "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.0",
     "@types/sqlite3": "^3.1.11",
+    "@typescript-eslint/eslint-plugin": "^8.46.4",
+    "@typescript-eslint/parser": "^8.46.4",
     "dotenv": "^17.2.3",
     "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
     "express": "^5.1.0",
     "install": "^0.13.0",
     "nodemon": "^3.1.10",
-    "npm": "^11.6.2",
+    "npm": "^11.6.0",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.4"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.2",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   }

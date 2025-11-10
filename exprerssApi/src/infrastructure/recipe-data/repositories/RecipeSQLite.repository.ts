@@ -1,32 +1,18 @@
-import { open, Database } from 'sqlite';
-import sqlite3 from 'sqlite3';
+import { Database } from 'sqlite';
 import { RecipeRepository } from '../../../core/domain/features/recipes/interfaces';
 import { Recipe } from '../../../core/domain/features/recipes/entities';
+import { RecipeDbContext } from '../persistence/contexts/RecipeDbContext';
 
 export class RecipeSQLiteRepository implements RecipeRepository {
-  private static instance: RecipeSQLiteRepository;
-  private db: Database | null = null;
 
-  private constructor() {}
+  constructor(private readonly context: RecipeDbContext) {}
 
-  static getInstance(): RecipeSQLiteRepository {
-    if (!RecipeSQLiteRepository.instance) {
-      RecipeSQLiteRepository.instance = new RecipeSQLiteRepository();
-    }
-    return RecipeSQLiteRepository.instance;
-  }
-
-  private async getDB(): Promise<Database> {
-    this.db ??= await open({
-        filename: 'database.sqlite',
-        driver: sqlite3.Database,
-      });
-    return this.db;
+  private get db(): Database {
+    return this.context.getDb();
   }
 
   async add(recipe: Recipe): Promise<void> {
-    const db = await this.getDB();
-    await db.run(
+    await this.db.run(
       `INSERT INTO recipes (id, Title, preparation_time, dificulty, budget, description)
        VALUES (?, ?, ?, ?, ?, ?)`,
       recipe.id,
@@ -39,8 +25,7 @@ export class RecipeSQLiteRepository implements RecipeRepository {
   }
 
   async findById(id: string): Promise<Recipe | null> {
-    const db = await this.getDB();
-    const row = await db.get(`SELECT * FROM recipes WHERE id = ?`, id);
+    const row = await this.db.get(`SELECT * FROM recipes WHERE id = ?`, id);
     if (!row) return null;
     return new Recipe(
       row.id,
@@ -53,8 +38,7 @@ export class RecipeSQLiteRepository implements RecipeRepository {
   }
 
   async findAll(): Promise<Recipe[]> {
-    const db = await this.getDB();
-    const rows = await db.all(`SELECT * FROM recipes`);
+    const rows = await this.db.all(`SELECT * FROM recipes`);
     return rows.map(
       (row: any) =>
         new Recipe(
@@ -69,8 +53,7 @@ export class RecipeSQLiteRepository implements RecipeRepository {
   }
 
   async update(recipe: Recipe): Promise<void> {
-    const db = await this.getDB();
-    await db.run(
+    await this.db.run(
       `UPDATE recipes
        SET Title=?, preparation_time=?, dificulty=?, budget=?, description=?
        WHERE id=?`,
@@ -84,7 +67,6 @@ export class RecipeSQLiteRepository implements RecipeRepository {
   }
 
   async delete(id: string): Promise<void> {
-    const db = await this.getDB();
-    await db.run(`DELETE FROM recipes WHERE id = ?`, id);
+    await this.db.run(`DELETE FROM recipes WHERE id = ?`, id);
   }
 }

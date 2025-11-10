@@ -1,6 +1,6 @@
 import { Migration } from '../../../../shared/migration-system/Migration';
 
-export const RecipeTableMigration: Migration = {
+export const CreateRecipeTableMigration: Migration = {
   id: '20251110_1_createRecipeTable',
   up: async (db) => {
     await db.exec(`

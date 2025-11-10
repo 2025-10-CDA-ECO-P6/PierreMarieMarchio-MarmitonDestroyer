@@ -6,12 +6,16 @@ import {
   getRecipeByIdController,
   updateRecipeController,
 } from '../controllers';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
-const router = Router();
+const recipesRouter = Router();
 
-router.get('/', getAllRecipesController);
-router.get('/:id', getRecipeByIdController);
-router.post('/', createRecipeController);
-router.put('/:id', updateRecipeController);
-router.delete('/:id', deleteRecipeController);
-export default router;
+recipesRouter.use(authMiddleware());
+
+recipesRouter.get('/', getAllRecipesController);
+recipesRouter.get('/:id', getRecipeByIdController);
+recipesRouter.post('/', createRecipeController);
+recipesRouter.put('/:id', updateRecipeController);
+recipesRouter.delete('/:id', deleteRecipeController);
+
+export default recipesRouter;
