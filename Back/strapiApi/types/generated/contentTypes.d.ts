@@ -467,12 +467,12 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiReciepeReciepe extends Struct.CollectionTypeSchema {
-  collectionName: 'reciepes';
+export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
+  collectionName: 'recipes';
   info: {
-    displayName: 'Reciepe';
-    pluralName: 'reciepes';
-    singularName: 'reciepe';
+    displayName: 'Recipe';
+    pluralName: 'recipes';
+    singularName: 'recipe';
   };
   options: {
     draftAndPublish: true;
@@ -493,19 +493,25 @@ export interface ApiReciepeReciepe extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetMinMax<
         {
           max: 5;
-          min: 0;
+          min: 1;
         },
         number
       >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::reciepe.reciepe'
+      'api::recipe.recipe'
     > &
       Schema.Attribute.Private;
-    preparation_time: Schema.Attribute.Integer;
+    preparation_time: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
     publishedAt: Schema.Attribute.DateTime;
-    Title: Schema.Attribute.String & Schema.Attribute.Required;
+    Title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1023,7 +1029,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::reciepe.reciepe': ApiReciepeReciepe;
+      'api::recipe.recipe': ApiRecipeRecipe;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

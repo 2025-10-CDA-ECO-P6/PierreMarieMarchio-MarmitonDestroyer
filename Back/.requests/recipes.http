@@ -1,0 +1,184 @@
+@jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYyNzY4Mjc4LCJleHAiOjE3NjUzNjAyNzh9.bJtyKp35de4zMbY6kQoSIH-K203MIi4YLZcvZHuE3tw
+
+### Connexion utilisateur
+POST http://localhost:1337/api/auth/local
+Content-Type: application/json
+
+{
+  "identifier": "admin@admin.com",
+  "password": "Adm1n@"
+}
+
+### Créer une recette 0
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+  "data": {
+    "Title": "Saucissés fumées, pomme de terre et champignons",
+    "preparation_time": 30,
+    "dificulty": 3,
+    "budget": 3,
+    "description": "Saucissés fumées, pomme de terre et champignons"
+  }
+}
+
+### Créer une recette 1
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Salade César maison",
+    "preparation_time": 20,
+    "dificulty": 2,
+    "budget": 3,
+    "description": "Une salade fraîche et croquante avec du poulet grillé et une sauce maison."
+  }
+}
+
+### Créer une recette 2
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Poulet rôti et légumes du four",
+    "preparation_time": 60,
+    "dificulty": 3,
+    "budget": 4,
+    "description": "Un poulet doré accompagné de légumes rôtis, parfait pour un repas du dimanche."
+  }
+}
+
+### Créer une recette 3
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Soupe de potiron",
+    "preparation_time": 25,
+    "dificulty": 1,
+    "budget": 2,
+    "description": "Une soupe douce et onctueuse au goût d’automne, facile à préparer."
+  }
+}
+
+### Créer une recette 4
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Lasagnes maison",
+    "preparation_time": 90,
+    "dificulty": 4,
+    "budget": 5,
+    "description": "Des lasagnes gratinées à la viande et à la sauce tomate, faites maison."
+  }
+}
+
+### Créer une recette 5
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Omelette aux champignons",
+    "preparation_time": 10,
+    "dificulty": 1,
+    "budget": 1,
+    "description": "Un plat rapide et savoureux pour le petit déjeuner ou un repas léger."
+  }
+}
+
+### Créer une recette 6
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Gratin dauphinois",
+    "preparation_time": 45,
+    "dificulty": 3,
+    "budget": 3,
+    "description": "Un classique gratiné à base de pommes de terre et de crème."
+  }
+}
+
+### Créer une recette 7
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Burger maison",
+    "preparation_time": 25,
+    "dificulty": 2,
+    "budget": 4,
+    "description": "Un burger juteux avec pain, steak, fromage et sauce maison."
+  }
+}
+
+### Créer une recette 8
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Curry de légumes au lait de coco",
+    "preparation_time": 35,
+    "dificulty": 3,
+    "budget": 2,
+    "description": "Un plat végétarien parfumé, plein de saveurs indiennes."
+  }
+}
+
+### Créer une recette 9
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+  "data": {
+    "Title": "Ratatouille niçoise",
+    "preparation_time": 40,
+    "dificulty": 2,
+    "budget": 2,
+    "description": "Un mélange de légumes méditerranéens mijotés à l’huile d’olive."
+  }
+}
+
+### Créer une recette 10
+POST http://localhost:1337/api/recipes
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+
+{
+  "data": {
+    "Title": "Bœuf bourguignon",
+    "preparation_time": 150,
+    "dificulty": 5,
+    "budget": 5,
+    "description": "Le grand classique français : bœuf mijoté au vin rouge avec carottes et oignons."
+  }
+}
