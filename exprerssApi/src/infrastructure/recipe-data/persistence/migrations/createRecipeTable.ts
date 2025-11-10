@@ -1,4 +1,4 @@
-import { Migration } from '../../../../shared/migration-systeme/Migration';
+import { Migration } from '../../../../shared/migration-system/Migration';
 
 export const RecipeTableMigration: Migration = {
   id: '20251110_1_createRecipeTable',

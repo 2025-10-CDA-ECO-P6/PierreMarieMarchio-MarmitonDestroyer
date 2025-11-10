@@ -1,4 +1,4 @@
-import { DbContext } from '../../shared/migration-systeme/DbContext';
+import { DbContext } from '../../shared/migration-system/DbContext';
 import { RecipeDbContext } from './persistence/contexts/RecipeDbContext';
 
 export class RecipeDataProvider {

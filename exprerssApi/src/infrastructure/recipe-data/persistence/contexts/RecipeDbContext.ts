@@ -1,4 +1,4 @@
-import { ModuleDbContext } from '../../../../shared/migration-systeme/ModuleDbContext';
+import { ModuleDbContext } from '../../../../shared/migration-system/ModuleDbContext';
 import { AppDbContext } from '../../../common-data/persistence/contexts/AppDbContext';
 import { RecipeTableMigration } from '../migrations/createRecipeTable';
 
