@@ -31,6 +31,8 @@ export class UpdateRecipeUseCase
       input.dificulty ?? existing.dificulty,
       input.budget ?? existing.budget,
       input.description ?? existing.description,
+      existing.createdAt,
+      input.ingredients ?? existing.ingredients,
     );
 
     await this.recipeRepo.update(updated);

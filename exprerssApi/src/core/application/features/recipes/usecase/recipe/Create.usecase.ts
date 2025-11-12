@@ -30,6 +30,8 @@ export class CreateRecipeUseCase
       recipe.dificulty,
       recipe.budget,
       recipe.description,
+      recipe.createdAt ?? new Date(),
+      recipe.ingredients,
     );
 
     await this.recipeRepo.add(newRecipe);

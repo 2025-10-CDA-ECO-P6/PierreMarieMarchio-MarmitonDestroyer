@@ -5,5 +5,7 @@ export interface RegisterRequestDTO {
 }
 
 export interface RegisterResponseDTO {
-  token: string;
+  data: {
+    token: string;
+  };
 }

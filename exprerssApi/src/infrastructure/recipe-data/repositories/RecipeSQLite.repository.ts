@@ -1,10 +1,15 @@
 import { Database } from 'sqlite';
-import { RecipeRepository } from '../../../core/domain/features/recipes/interfaces';
-import { Recipe } from '../../../core/domain/features/recipes/entities';
+import {
+  RecipeFilters,
+  RecipeRepository,
+} from '../../../core/domain/features/recipes/interfaces';
+import {
+  Ingredient,
+  Recipe,
+} from '../../../core/domain/features/recipes/entities';
 import { RecipeDbContext } from '../persistence/contexts/RecipeDbContext';
 
 export class RecipeSQLiteRepository implements RecipeRepository {
-
   constructor(private readonly context: RecipeDbContext) {}
 
   private get db(): Database {
@@ -13,14 +18,15 @@ export class RecipeSQLiteRepository implements RecipeRepository {
 
   async add(recipe: Recipe): Promise<void> {
     await this.db.run(
-      `INSERT INTO recipes (id, Title, preparation_time, dificulty, budget, description)
-       VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO recipes (id, Title, preparation_time, dificulty, budget, description, createdAt)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
       recipe.id,
       recipe.Title,
       recipe.preparation_time,
       recipe.dificulty,
       recipe.budget,
       recipe.description,
+      recipe.createdAt.toISOString(),
     );
   }
 
@@ -34,11 +40,32 @@ export class RecipeSQLiteRepository implements RecipeRepository {
       row.dificulty,
       row.budget,
       row.description,
+      new Date(row.createdAt),
     );
   }
 
-  async findAll(): Promise<Recipe[]> {
-    const rows = await this.db.all(`SELECT * FROM recipes`);
+  async findAll(filters?: RecipeFilters): Promise<Recipe[]> {
+    const conditions: string[] = [];
+    const params: any[] = [];
+
+    if (filters?.afterDate) {
+      conditions.push(`createdAt > ?`);
+      params.push(filters.afterDate.toISOString());
+    }
+    if (filters?.titleContains) {
+      conditions.push(`Title LIKE ?`);
+      params.push(`%${filters.titleContains}%`);
+    }
+
+    const whereClause = conditions.length
+      ? `WHERE ${conditions.join(' AND ')}`
+      : '';
+
+    const rows = await this.db.all(
+      `SELECT * FROM recipes ${whereClause}`,
+      params,
+    );
+
     return rows.map(
       (row: any) =>
         new Recipe(
@@ -48,6 +75,7 @@ export class RecipeSQLiteRepository implements RecipeRepository {
           row.dificulty,
           row.budget,
           row.description,
+          new Date(row.createdAt),
         ),
     );
   }
@@ -68,5 +96,22 @@ export class RecipeSQLiteRepository implements RecipeRepository {
 
   async delete(id: string): Promise<void> {
     await this.db.run(`DELETE FROM recipes WHERE id = ?`, id);
+  }
+
+  async findWithIngredients(id: string): Promise<Recipe | null> {
+    const recipe = await this.findById(id);
+    if (!recipe) return null;
+
+    const rows = await this.db.all(
+      `SELECT i.id, i.name
+       FROM ingredients i
+       INNER JOIN recipe_ingredients ri ON ri.ingredient_id = i.id
+       WHERE ri.recipe_id = ?`,
+      id,
+    );
+
+    const ingredients = rows.map((r: any) => new Ingredient(r.id, r.name));
+    recipe.ingredients = ingredients;
+    return recipe;
   }
 }

@@ -19,10 +19,11 @@ export class RegisterUseCase
         email: request.email,
         password: request.password,
       });
-      return { token };
+
+      return { data: { token } };
     } catch (e: any) {
       if (e.message.includes('already exists')) {
-        throw new ConflictError('Error');
+        throw new ConflictError('User already exists');
       }
       throw e;
     }

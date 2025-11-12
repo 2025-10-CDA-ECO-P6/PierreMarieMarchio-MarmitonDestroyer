@@ -8,11 +8,19 @@ import {
 } from '../../core/application/features/recipes/usecase';
 import { asyncHandler } from '../extensions/AsyncHandler.extension';
 
-export const getAllRecipesController = asyncHandler(async (_req, res) => {
+export const getAllRecipesController = asyncHandler(async (req, res) => {
   const useCase = container.inject<GetAllRecipesUseCase>(
     'GetAllRecipesUseCase',
   );
-  const response = await useCase.execute();
+
+  const filters = {
+    afterDate: req.query.afterDate
+      ? new Date(req.query.afterDate as string)
+      : undefined,
+    titleContains: req.query.titleContains as string | undefined,
+  };
+
+  const response = await useCase.execute(filters);
   res.json(response);
 });
 

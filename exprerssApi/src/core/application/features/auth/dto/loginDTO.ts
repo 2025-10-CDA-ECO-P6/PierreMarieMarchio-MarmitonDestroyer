@@ -4,5 +4,7 @@ export interface LoginRequestDTO {
 }
 
 export interface LoginResponseDTO {
-  token: string;
+  data: {
+    token: string;
+  };
 }

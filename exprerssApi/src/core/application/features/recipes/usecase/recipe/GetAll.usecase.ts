@@ -6,11 +6,18 @@ export interface GetRecipesResponse {
   data: RecipeFullDTO[];
 }
 
-export class GetAllRecipesUseCase implements UseCase<void, GetRecipesResponse> {
+export interface GetRecipesFilters {
+  afterDate?: Date;
+  titleContains?: string;
+}
+
+export class GetAllRecipesUseCase
+  implements UseCase<GetRecipesFilters | void, GetRecipesResponse>
+{
   constructor(private readonly recipeRepo: RecipeRepository) {}
 
-  async execute(): Promise<GetRecipesResponse> {
-    const res: RecipeFullDTO[] = await this.recipeRepo.findAll();
+  async execute(filters?: GetRecipesFilters): Promise<GetRecipesResponse> {
+    const res = await this.recipeRepo.findAll(filters);
     return { data: res };
   }
 }

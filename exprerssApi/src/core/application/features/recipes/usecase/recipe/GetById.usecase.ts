@@ -13,7 +13,7 @@ export class GetRecipeByIdUseCase
   constructor(private readonly recipeRepo: RecipeRepository) {}
 
   async execute(id: string): Promise<GetRecipeByIdResponse> {
-    const recipe = await this.recipeRepo.findById(id);
+    const recipe = await this.recipeRepo.findWithIngredients(id);
     if (!recipe) throw new NotFoundError('Recipe not found');
     return { data: recipe };
   }

@@ -18,7 +18,8 @@ export class LoginUseCase
         email: request.email,
         password: request.password,
       });
-      return { token };
+
+      return { data: { token } };
     } catch {
       throw new ValidationError('Invalid email or password');
     }
