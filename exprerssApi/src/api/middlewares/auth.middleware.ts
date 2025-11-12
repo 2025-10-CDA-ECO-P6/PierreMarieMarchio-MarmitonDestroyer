@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserContext } from '../../core/domain/common/interfaces';
 import { JWTService } from '../../core/domain/features/auth/interfaces';
 import { container } from '../app';
 import { ExpressUserContext } from '../contexts/ExpressUserContext';
@@ -27,17 +26,15 @@ export const authMiddleware = () => {
         name: string;
       }>(token);
 
-      const userContext: UserContext = new ExpressUserContext(
+      container.register('UserContext', () => new ExpressUserContext(
         payload.userId,
         payload.email,
         payload.name,
-      );
-
-      container.register('UserContext', () => userContext);
+      ));
 
       next();
-    } catch (err) {
-      return res.status(401).json({ error: 'Invalid token: ' + err });
+    } catch {
+      return res.status(401).json({ error: 'Invalid token'});
     }
   };
 };
