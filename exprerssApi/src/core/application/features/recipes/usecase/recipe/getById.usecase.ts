@@ -1,4 +1,5 @@
 import { RecipeRepository } from '../../../../../domain/features/recipes/interfaces';
+import { NotFoundError } from '../../../../common/exeptions';
 import { UseCase } from '../../../../common/interfaces';
 import { RecipeFullDTO } from '../../dto';
 
@@ -13,6 +14,7 @@ export class GetRecipeByIdUseCase
 
   async execute(id: string): Promise<GetRecipeByIdResponse> {
     const recipe = await this.recipeRepo.findById(id);
-    return { data: recipe ?? null };
+    if (!recipe) throw new NotFoundError('Recipe not found');
+    return { data: recipe };
   }
 }

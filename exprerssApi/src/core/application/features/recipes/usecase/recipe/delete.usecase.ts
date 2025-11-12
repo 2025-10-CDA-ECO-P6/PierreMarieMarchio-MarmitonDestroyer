@@ -1,4 +1,5 @@
 import { RecipeRepository } from '../../../../../domain/features/recipes/interfaces';
+import { NotFoundError } from '../../../../common/exeptions';
 import { UseCase } from '../../../../common/interfaces';
 
 export interface DeleteRecipeResponse {
@@ -12,7 +13,7 @@ export class DeleteRecipeUseCase
 
   async execute(id: string): Promise<DeleteRecipeResponse> {
     const recipe = await this.recipeRepo.findById(id);
-    if (!recipe) return { success: false };
+    if (!recipe) throw new NotFoundError('Recipe not found');
 
     await this.recipeRepo.delete(id);
     return { success: true };

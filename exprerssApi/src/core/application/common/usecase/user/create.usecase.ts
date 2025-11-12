@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { UserFullDTO } from '../../dto';
 import { UseCase } from '../../interfaces';
 import { UserRepository } from '../../../../domain/common/interfaces';
+import { ValidationError } from '../../exeptions';
 
 export interface CreateUserRequest {
   name: string;
@@ -21,14 +22,18 @@ export class CreateUserUseCase
   constructor(private readonly userRepo: UserRepository) {}
 
   async execute(user: CreateUserRequest): Promise<CreateUserResponse> {
+    if (!user.name || !user.email || !user.password) {
+      throw new ValidationError('Name, email and password are required');
+    }
+
     const now = new Date();
-    const hashpassword = await bcrypt.hash(user.password, 10);
+    const hashedPassword = await bcrypt.hash(user.password, 10);
 
     const newUser = new User(
       randomUUID(),
       user.name,
       user.email,
-      hashpassword,
+      hashedPassword,
       now,
       now,
     );
@@ -36,11 +41,7 @@ export class CreateUserUseCase
     await this.userRepo.add(newUser);
 
     return {
-      data: {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-      },
+      data: { id: newUser.id, name: newUser.name, email: newUser.email },
     };
   }
 }

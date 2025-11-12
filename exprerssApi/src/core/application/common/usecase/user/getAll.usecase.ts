@@ -11,13 +11,7 @@ export class GetAllUsersUseCase implements UseCase<void, GetUsersResponse> {
 
   async execute(): Promise<GetUsersResponse> {
     const users = await this.userRepo.findAll();
-
-    const data = users.map((u) => ({
-      id: u.id,
-      name: u.name,
-      email: u.email,
-    }));
-
+    const data = users.map((u) => ({ id: u.id, name: u.name, email: u.email }));
     return { data };
   }
 }

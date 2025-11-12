@@ -9,6 +9,8 @@ import { registerAuthApplicationServices } from '../core/application/features/au
 import { registerRecipeApplicationServices } from '../core/application/features/recipes/ServiceRegister';
 import { AppDbContext } from '../infrastructure/common/persistence/contexts/AppDbContext';
 import { RecipeDbContext } from '../infrastructure/recipe-data/persistence/contexts/RecipeDbContext';
+import { responseMiddleware } from './middlewares/response.middleware';
+import { errorMiddleware } from './middlewares/error.middleware';
 
 export const container = new DIContainer();
 
@@ -37,7 +39,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-
+app.use(responseMiddleware);
 app.use('/api', routes);
+app.use(errorMiddleware);
 
 export default app;

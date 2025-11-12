@@ -1,5 +1,6 @@
 import { Recipe } from '../../../../../domain/features/recipes/entities';
 import { RecipeRepository } from '../../../../../domain/features/recipes/interfaces';
+import { NotFoundError } from '../../../../common/exeptions';
 import { UseCase } from '../../../../common/interfaces';
 import { RecipeDTO, RecipeFullDTO } from '../../dto';
 
@@ -21,7 +22,7 @@ export class UpdateRecipeUseCase
     input: Partial<RecipeDTO>;
   }): Promise<UpdateRecipeResponse> {
     const existing = await this.recipeRepo.findById(id);
-    if (!existing) return { data: null };
+    if (!existing) throw new NotFoundError('Recipe not found');
 
     const updated = new Recipe(
       id,

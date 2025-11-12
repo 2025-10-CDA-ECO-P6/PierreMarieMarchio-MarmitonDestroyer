@@ -1,6 +1,7 @@
 import { User } from '../../../../domain/common/entities';
 import { UserRepository } from '../../../../domain/common/interfaces';
 import { UserDTO, UserFullDTO } from '../../dto';
+import { NotFoundError } from '../../exeptions';
 import { UseCase } from '../../interfaces';
 
 export interface UpdateUserResponse {
@@ -21,7 +22,7 @@ export class UpdateUserUseCase
     input: Partial<UserDTO>;
   }): Promise<UpdateUserResponse> {
     const existing = await this.userRepo.findById(id);
-    if (!existing) return { data: null };
+    if (!existing) throw new NotFoundError('User not found');
 
     const updated = new User(
       id,

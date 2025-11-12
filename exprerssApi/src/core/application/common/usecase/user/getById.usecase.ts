@@ -1,5 +1,6 @@
 import { UserRepository } from '../../../../domain/common/interfaces';
 import { UserFullDTO } from '../../dto';
+import { NotFoundError } from '../../exeptions';
 import { UseCase } from '../../interfaces';
 
 export interface GetUserByIdResponse {
@@ -13,7 +14,7 @@ export class GetUserByIdUseCase
 
   async execute(id: string): Promise<GetUserByIdResponse> {
     const user = await this.userRepo.findById(id);
-    if (!user) return { data: null };
+    if (!user) throw new NotFoundError('User not found');
 
     return { data: { id: user.id, name: user.name, email: user.email } };
   }
