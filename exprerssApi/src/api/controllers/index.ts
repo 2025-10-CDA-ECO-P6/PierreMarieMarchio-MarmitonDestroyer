@@ -12,4 +12,14 @@ export {
   deleteUserController,
   updateUserController,
 } from './user.controller';
+export {
+  createIngredientController,
+  deleteIngredientController,
+  updateIngredientController,
+  getAllIngredientsController,
+  getIngredientsByRecipeController,
+  addIngredientToRecipeController,
+  removeIngredientFromRecipeController,
+  getIngredientByIdController,
+} from './ingredient.controller';
 export { loginController, registerController } from './auth.controller';

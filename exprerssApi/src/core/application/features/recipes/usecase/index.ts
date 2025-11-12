@@ -2,20 +2,24 @@ export {
   CreateRecipeUseCase,
   CreateRecipeRequest,
   CreateRecipeResponse,
-} from './recipe/create.usecase';
+} from './recipe/Create.usecase';
 export {
   GetRecipeByIdUseCase,
   GetRecipeByIdResponse,
-} from './recipe/getById.usecase';
+} from './recipe/GetById.usecase';
 export {
   GetAllRecipesUseCase,
   GetRecipesResponse,
-} from './recipe/getAll.usecase';
+} from './recipe/GetAll.usecase';
 export {
   UpdateRecipeUseCase,
   UpdateRecipeResponse,
-} from './recipe/update.usecase';
+} from './recipe/Update.usecase';
 export {
   DeleteRecipeUseCase,
   DeleteRecipeResponse,
-} from './recipe/delete.usecase';
+} from './recipe/Delete.usecase';
+export {
+  GetIngredientByIdUseCase,
+  GetIngredientByIdResponse,
+} from './ingredient/GetById.usecase';

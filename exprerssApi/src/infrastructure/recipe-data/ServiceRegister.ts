@@ -1,6 +1,10 @@
 import { DIContainer } from '../../shared/dependency-injection/DIContainer';
 import { RecipeDbContext } from './persistence/contexts/RecipeDbContext';
-import { RecipeSQLiteRepository } from './repositories';
+import {
+  IngredientSQLiteRepository,
+  RecipeIngredientSQLiteRepository,
+  RecipeSQLiteRepository,
+} from './repositories';
 
 export function registerRecipeDataInfrastructureService(
   container: DIContainer,
@@ -12,5 +16,13 @@ export function registerRecipeDataInfrastructureService(
   container.register(
     'RecipeRepository',
     (c) => new RecipeSQLiteRepository(c.inject('RecipeDbContext')),
+  );
+  container.register(
+    'IngredientRepository',
+    (c) => new IngredientSQLiteRepository(c.inject('RecipeDbContext')),
+  );
+  container.register(
+    'RecipeIngredientRepository',
+    (c) => new RecipeIngredientSQLiteRepository(c.inject('RecipeDbContext')),
   );
 }

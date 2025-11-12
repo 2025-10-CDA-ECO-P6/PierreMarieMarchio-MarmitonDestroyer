@@ -1,2 +1,8 @@
-export { RecipeDTO } from './RecipeDTO';
-export { RecipeFullDTO } from './RecipeFullDTO';
+export { RecipeDTO, RecipeFullDTO } from './RecipeDTO';
+export {
+  IngredientDTO,
+  IngredientFullDTO,
+  AddIngredientToRecipeDTO,
+  RecipeIngredientsListDTO,
+  RemoveIngredientFromRecipeDTO,
+} from './IngredientDTO';

@@ -5,3 +5,7 @@ export interface RecipeDTO {
   budget: number;
   description: string;
 }
+
+export interface RecipeFullDTO extends RecipeDTO {
+  id: string;
+}

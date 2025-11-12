@@ -1,4 +1,4 @@
-@jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNDU2YzE1ZC1iMjA0LTRjN2YtYWI0Ny1kYTk2MTZjOTQxYmYiLCJpYXQiOjE3NjI5NDU3NTMsImV4cCI6MTc2Mjk0OTM1M30.mruzplWKdu0ihFRd-yGz9CPywW1zaf4vJU8o6go5PDE
+@jwt = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNDU2YzE1ZC1iMjA0LTRjN2YtYWI0Ny1kYTk2MTZjOTQxYmYiLCJpYXQiOjE3NjI5NTU1NTQsImV4cCI6MTc2Mjk1OTE1NH0.QFyqnpPGfm7GDq_HESMv50qpJ6XwE7TWa7tKxAj7LDw
 
 ### Connexion utilisateur
 POST http://localhost:3000/api/auth/login
@@ -258,3 +258,33 @@ Content-Type: application/json
     "password": "test@01"
   }
 }
+
+###Créer un ingrédient
+POST http://localhost:3000/api/ingredient
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+  "data": {
+  "name": "Farine"
+  }
+}
+
+###Créer un ingrédient
+POST http://localhost:3000/api/ingredient
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+  "data": {
+  "name": "Oeuf"
+  }
+}
+
+###List ingrédient
+GET http://localhost:3000/api/ingredient
+Authorization: Bearer {{jwt}}
+
+###Supprimer ingrédient
+DELETE http://localhost:3000/api/ingredient/4b10c379-7757-4788-b3bf-1f9c4d0dbf40
+Authorization: Bearer {{jwt}}

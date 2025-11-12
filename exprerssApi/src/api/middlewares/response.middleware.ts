@@ -12,7 +12,7 @@ export const responseMiddleware = (
       return originalJson(body);
     if (body?.success === true && body.data) return originalJson(body);
 
-    return originalJson({ success: true, data: body });
+    return originalJson({ success: true, data: body.data });
   };
 
   next();

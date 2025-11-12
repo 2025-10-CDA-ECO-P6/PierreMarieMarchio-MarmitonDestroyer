@@ -12,6 +12,7 @@ export interface CreateRecipeRequest {
 export interface CreateRecipeResponse {
   data: RecipeFullDTO;
 }
+
 export class CreateRecipeUseCase
   implements UseCase<RecipeDTO, CreateRecipeResponse>
 {
