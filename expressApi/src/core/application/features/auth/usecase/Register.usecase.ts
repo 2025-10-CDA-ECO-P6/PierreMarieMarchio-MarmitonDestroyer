@@ -1,4 +1,5 @@
 import { AuthService } from '../../../../domain/features/auth/interfaces';
+import { UserFullDTO } from '../../../common/dto';
 import { ConflictError, ValidationError } from '../../../common/exeptions';
 import { UseCase } from '../../../common/interfaces';
 import { RegisterRequestDTO, RegisterResponseDTO } from '../dto';
@@ -9,21 +10,27 @@ export class RegisterUseCase
   constructor(private readonly authService: AuthService) {}
 
   async execute(request: RegisterRequestDTO): Promise<RegisterResponseDTO> {
-    if (!request.name || !request.email || !request.password) {
+    if (!request.username || !request.email || !request.password) {
       throw new ValidationError('Name, email, and password are required');
     }
 
     try {
-      const { token } = await this.authService.register({
-        name: request.name,
+      const { token, user } = await this.authService.register({
+        name: request.username,
         email: request.email,
         password: request.password,
       });
 
-      return { data: { token } };
+      const publicUser: UserFullDTO = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      };
+
+      return { token, user: publicUser };
     } catch (e: any) {
       if (e.message.includes('already exists')) {
-        throw new ConflictError('User already exists');
+        throw new ConflictError('Error');
       }
       throw e;
     }

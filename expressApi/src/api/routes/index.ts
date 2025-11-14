@@ -9,6 +9,6 @@ const router = Router();
 router.use('/auth', authRouter);
 router.use('/recipes', recipesRouter);
 router.use('/users', userRouter);
-router.use('/ingredient', ingredientsRouter);
+router.use('/ingredients', ingredientsRouter);
 
 export default router;

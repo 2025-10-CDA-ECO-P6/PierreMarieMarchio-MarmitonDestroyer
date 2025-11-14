@@ -1,10 +1,11 @@
+import { UserFullDTO } from '../../../common/dto';
+
 export interface LoginRequestDTO {
-  email: string;
+  identifier: string;
   password: string;
 }
 
 export interface LoginResponseDTO {
-  data: {
-    token: string;
-  };
+  token: string;
+  user: UserFullDTO;
 }

@@ -15,7 +15,7 @@ export class AuthServiceImpl implements AuthService {
   async login(request: {
     password: string;
     email: string;
-  }): Promise<{ token: string }> {
+  }): Promise<{ token: string; user: User }> {
     const user = await this.authRepo.findByEmail(request.email);
     if (!user) throw new Error('Invalid credentials');
 
@@ -24,14 +24,14 @@ export class AuthServiceImpl implements AuthService {
 
     const token = this.jwtService.sign({ userId: user.id });
 
-    return { token };
+    return { token, user };
   }
 
   async register(request: {
     name: string;
     email: string;
     password: string;
-  }): Promise<{ token: string }> {
+  }): Promise<{ token: string; user: User }> {
     const existing = await this.authRepo.findByEmail(request.email);
     if (existing) throw new Error('Email already used');
 
@@ -49,6 +49,6 @@ export class AuthServiceImpl implements AuthService {
     await this.authRepo.add(user);
 
     const token = this.jwtService.sign({ userId: user.id });
-    return { token };
+    return { token, user };
   }
 }
