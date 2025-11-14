@@ -1,7 +1,7 @@
-import { BaseEntity } from '../../common/bases';
+import { DocumentEntity } from '../../common/bases';
 import { Ingredient } from './Ingredient';
 
-export class Recipe extends BaseEntity {
+export class Recipe extends DocumentEntity {
   title: string;
   preparationTime: number;
   difficulty: number;

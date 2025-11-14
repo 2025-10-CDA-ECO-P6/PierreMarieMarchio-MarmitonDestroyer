@@ -16,6 +16,6 @@ export class GetUserByIdUseCase
     const user = await this.userRepo.findById(id);
     if (!user) throw new NotFoundError('User not found');
 
-    return { data: { id: user.id, name: user.name, email: user.email } };
+    return { data: { id: user.id, name: user.username, email: user.email } };
   }
 }

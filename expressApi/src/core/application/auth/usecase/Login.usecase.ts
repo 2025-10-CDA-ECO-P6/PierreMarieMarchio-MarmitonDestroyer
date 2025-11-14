@@ -1,8 +1,8 @@
-import { AuthService } from "../../../domain/auth/interfaces";
-import { UserFullDTO } from "../../common/dto";
-import { ValidationError } from "../../common/exeptions";
-import { UseCase } from "../../common/interfaces";
-import { LoginRequestDTO, LoginResponseDTO } from "../dto";
+import { AuthService } from '../../../domain/auth/interfaces';
+import { UserFullDTO } from '../../common/dto';
+import { ValidationError } from '../../common/exeptions';
+import { UseCase } from '../../common/interfaces';
+import { LoginRequestDTO, LoginResponseDTO } from '../dto';
 
 export class LoginUseCase
   implements UseCase<LoginRequestDTO, LoginResponseDTO>
@@ -23,7 +23,7 @@ export class LoginUseCase
       const publicUser: UserFullDTO = {
         id: user.id,
         email: user.email,
-        name: user.name,
+        name: user.username,
       };
 
       return { token, user: publicUser };

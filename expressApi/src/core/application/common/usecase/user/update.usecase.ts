@@ -26,7 +26,7 @@ export class UpdateUserUseCase
 
     const updated = new User(
       id,
-      input.name ?? existing.name,
+      input.name ?? existing.username,
       input.email ?? existing.email,
       existing.password,
       existing.createdAt,
@@ -36,7 +36,7 @@ export class UpdateUserUseCase
     await this.userRepo.update(updated);
 
     return {
-      data: { id: updated.id, name: updated.name, email: updated.email },
+      data: { id: updated.id, name: updated.username, email: updated.email },
     };
   }
 }

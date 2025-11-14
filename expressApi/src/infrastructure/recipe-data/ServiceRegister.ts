@@ -15,11 +15,19 @@ export function registerRecipeDataInfrastructureService(
   );
   container.register(
     'RecipeRepository',
-    (c) => new RecipeSQLiteRepository(c.inject('RecipeDbContext')),
+    (c) =>
+      new RecipeSQLiteRepository(
+        c.inject('RecipeDbContext'),
+        c.inject('RecipeIngredientRepository'),
+      ),
   );
   container.register(
     'IngredientRepository',
-    (c) => new IngredientSQLiteRepository(c.inject('RecipeDbContext')),
+    (c) =>
+      new IngredientSQLiteRepository(
+        c.inject('RecipeDbContext'),
+        c.inject('RecipeIngredientRepository'),
+      ),
   );
   container.register(
     'RecipeIngredientRepository',

@@ -1,2 +1,6 @@
-export { BaseEntity } from './Entity';
-export { BaseRepository, DocumentIdRepository } from './Repository';
+export { BaseEntity, DocumentEntity } from './Entity';
+export {
+  BaseRepository,
+  DocumentIdRepository,
+  ManyToManyRepository,
+} from './Repository';

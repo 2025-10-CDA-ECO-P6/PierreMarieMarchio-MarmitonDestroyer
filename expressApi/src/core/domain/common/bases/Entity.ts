@@ -1,8 +1,17 @@
 export abstract class BaseEntity {
   id: string;
-  documentId: string;
   createdAt: Date;
   updatedAt: Date;
+
+  constructor(id: string, createdAt: Date, updatedAt: Date) {
+    this.id = id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export abstract class DocumentEntity extends BaseEntity {
+  documentId: string;
 
   constructor(
     id: string,
@@ -10,9 +19,7 @@ export abstract class BaseEntity {
     createdAt: Date,
     updatedAt: Date,
   ) {
-    this.id = id;
+    super(id, createdAt, updatedAt);
     this.documentId = documentId;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
   }
 }

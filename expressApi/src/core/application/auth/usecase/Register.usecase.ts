@@ -1,9 +1,8 @@
-import { AuthService } from "../../../domain/auth/interfaces";
-import { UserFullDTO } from "../../common/dto";
-import { ValidationError, ConflictError } from "../../common/exeptions";
-import { UseCase } from "../../common/interfaces";
-import { RegisterRequestDTO, RegisterResponseDTO } from "../dto";
-
+import { AuthService } from '../../../domain/auth/interfaces';
+import { UserFullDTO } from '../../common/dto';
+import { ValidationError, ConflictError } from '../../common/exeptions';
+import { UseCase } from '../../common/interfaces';
+import { RegisterRequestDTO, RegisterResponseDTO } from '../dto';
 
 export class RegisterUseCase
   implements UseCase<RegisterRequestDTO, RegisterResponseDTO>
@@ -25,7 +24,7 @@ export class RegisterUseCase
       const publicUser: UserFullDTO = {
         id: user.id,
         email: user.email,
-        name: user.name,
+        name: user.username,
       };
 
       return { token, user: publicUser };

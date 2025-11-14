@@ -1,7 +1,9 @@
-import { BaseEntity } from "../../common/bases";
+import { DocumentEntity } from '../../common/bases';
+import { Recipe } from './Recipe';
 
-export class Ingredient extends BaseEntity {
+export class Ingredient extends DocumentEntity {
   name: string;
+  recipies?: Recipe[];
 
   constructor(
     id: string,
@@ -9,8 +11,10 @@ export class Ingredient extends BaseEntity {
     name: string,
     createdAt: Date,
     updatedAt: Date,
+    recipies?: Recipe[],
   ) {
     super(id, documentId, createdAt, updatedAt);
     this.name = name;
+    this.recipies = recipies;
   }
 }

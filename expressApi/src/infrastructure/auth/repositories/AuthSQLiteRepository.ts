@@ -10,7 +10,7 @@ export class AuthSQLiteRepository implements AuthRepository {
     return this.context.getDb();
   }
 
-  async add(user: User): Promise<void> {
+  async create(user: User): Promise<void> {
     await this.db.run(
       `INSERT INTO users (id, name, email, password, createdAt, updatedAt)
        VALUES (?, ?, ?, ?, ?, ?)`,

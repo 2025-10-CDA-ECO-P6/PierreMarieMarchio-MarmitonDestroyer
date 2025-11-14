@@ -41,7 +41,7 @@ export class CreateUserUseCase
     await this.userRepo.add(newUser);
 
     return {
-      data: { id: newUser.id, name: newUser.name, email: newUser.email },
+      data: { id: newUser.id, name: newUser.username, email: newUser.email },
     };
   }
 }

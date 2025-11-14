@@ -1,43 +1,63 @@
-import { Database } from 'sqlite';
+import { DocumentIdRepository } from '../../../core/domain/common/bases';
 import { Ingredient } from '../../../core/domain/recipes/entities';
-import { IngredientRepository } from '../../../core/domain/recipes/interfaces';
-import { RecipeDbContext } from '../persistence/contexts/RecipeDbContext';
+import {
+  IngredientRepository,
+  RecipeIngredientRepository,
+} from '../../../core/domain/recipes/interfaces';
+import { DbContext } from '../../../shared/migration-system/DbContext';
+import {
+  BaseSQLiteRepository,
+  DocumentIdSQLiteRepository,
+} from '../../common/bases';
 
-export class IngredientSQLiteRepository implements IngredientRepository {
-  constructor(private readonly context: RecipeDbContext) {}
+export class IngredientSQLiteRepository
+  extends BaseSQLiteRepository<Ingredient>
+  implements IngredientRepository
+{
+  protected tableName = 'ingredients';
+  private documentIdRepo: DocumentIdRepository<Ingredient>;
+  private recipeIngredientRepo: RecipeIngredientRepository;
 
-  private get db(): Database {
-    return this.context.getDb();
+  constructor(
+    context: DbContext,
+    recipeIngredientRepo: RecipeIngredientRepository,
+  ) {
+    super(context);
+
+    this.documentIdRepo = new DocumentIdSQLiteRepository<Ingredient>(
+      context,
+      this.tableName,
+      this.mapRowToEntity.bind(this),
+    );
+
+    this.recipeIngredientRepo = recipeIngredientRepo;
   }
 
-  async add(ingredient: Ingredient): Promise<void> {
-    await this.db.run(
-      `INSERT INTO ingredients (id, name) VALUES (?, ?)`,
-      ingredient.id,
-      ingredient.name,
+  protected mapRowToEntity(row: any): Ingredient {
+    return new Ingredient(
+      row.id,
+      row.documentId,
+      row.name,
+      new Date(row.createdAt),
+      new Date(row.updatedAt),
     );
   }
 
-  async findById(id: string): Promise<Ingredient | null> {
-    const row = await this.db.get(`SELECT * FROM ingredients WHERE id = ?`, id);
-    if (!row) return null;
-    return new Ingredient(row.id, row.name);
+  async findWithRecipes(id: string): Promise<Ingredient | null> {
+    const ingredient = await this.findById(id);
+    if (!ingredient) return null;
+
+    const recipes = await this.recipeIngredientRepo.getRecipesByIngredient(id);
+    ingredient.recipies = recipes;
+
+    return ingredient;
   }
 
-  async findAll(): Promise<Ingredient[]> {
-    const rows = await this.db.all(`SELECT * FROM ingredients`);
-    return rows.map((row: any) => new Ingredient(row.id, row.name));
+  findByDocumentId(documentId: string): Promise<Ingredient | null> {
+    return this.documentIdRepo.findByDocumentId(documentId);
   }
 
-  async update(ingredient: Ingredient): Promise<void> {
-    await this.db.run(
-      `UPDATE ingredients SET name=? WHERE id=?`,
-      ingredient.name,
-      ingredient.id,
-    );
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.db.run(`DELETE FROM ingredients WHERE id=?`, id);
+  findAllByDocumentIds(documentIds: string[]): Promise<Ingredient[]> {
+    return this.documentIdRepo.findAllByDocumentIds(documentIds);
   }
 }

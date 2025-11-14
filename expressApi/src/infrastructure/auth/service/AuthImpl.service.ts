@@ -46,7 +46,7 @@ export class AuthServiceImpl implements AuthService {
       new Date(),
     );
 
-    await this.authRepo.add(user);
+    await this.authRepo.create(user);
 
     const token = this.jwtService.sign({ userId: user.id });
     return { token, user };

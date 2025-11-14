@@ -1,57 +1,59 @@
-import { Database } from 'sqlite';
-import { Ingredient } from '../../../core/domain/recipes/entities';
+import { Ingredient, Recipe } from '../../../core/domain/recipes/entities';
 import { RecipeIngredientRepository } from '../../../core/domain/recipes/interfaces';
-import { RecipeDbContext } from '../persistence/contexts/RecipeDbContext';
+import { DbContext } from '../../../shared/migration-system/DbContext';
+import { ManyToManySQLiteRepository } from '../../common/bases';
 
 export class RecipeIngredientSQLiteRepository
+  extends ManyToManySQLiteRepository<Recipe, Ingredient>
   implements RecipeIngredientRepository
 {
-  constructor(private readonly context: RecipeDbContext) {}
+  protected tableName = 'recipes_ingredients';
 
-  private get db(): Database {
-    return this.context.getDb();
+  constructor(context: DbContext) {
+    super(context);
   }
 
-  async addIngredientToRecipe(
+  protected mapRightRow(row: any): Ingredient {
+    return new Ingredient(
+      row.id,
+      row.documentId,
+      row.name,
+      new Date(row.createdAt),
+      new Date(row.updatedAt),
+    );
+  }
+
+  protected mapLeftRow(row: any): Recipe {
+    return new Recipe(
+      row.id,
+      row.documentId,
+      row.title,
+      row.preparationTime,
+      row.difficulty,
+      row.budget,
+      row.description,
+      new Date(row.createdAt),
+      new Date(row.updatedAt),
+      row.publishedAt ? new Date(row.publishedAt) : null,
+    );
+  }
+
+  addIngredientToRecipe(recipeId: string, ingredientId: string): Promise<void> {
+    return this.addRelation(recipeId, ingredientId);
+  }
+
+  removeIngredientFromRecipe(
     recipeId: string,
     ingredientId: string,
   ): Promise<void> {
-    await this.db.run(
-      `INSERT OR IGNORE INTO recipe_ingredients (recipe_id, ingredient_id) VALUES (?, ?)`,
-      recipeId,
-      ingredientId,
-    );
+    return this.removeRelation(recipeId, ingredientId);
   }
 
-  async removeIngredientFromRecipe(
-    recipeId: string,
-    ingredientId: string,
-  ): Promise<void> {
-    await this.db.run(
-      `DELETE FROM recipe_ingredients WHERE recipe_id=? AND ingredient_id=?`,
-      recipeId,
-      ingredientId,
-    );
+  getIngredientsByRecipe(recipeId: string): Promise<Ingredient[]> {
+    return this.getRightByLeft(recipeId);
   }
 
-  async getIngredientsByRecipe(recipeId: string): Promise<Ingredient[]> {
-    const rows = await this.db.all(
-      `
-      SELECT i.* FROM ingredients i
-      JOIN recipe_ingredients ri ON i.id = ri.ingredient_id
-      WHERE ri.recipe_id = ?
-    `,
-      recipeId,
-    );
-
-    return rows.map((row: any) => new Ingredient(row.id, row.name));
-  }
-
-  async getRecipesByIngredient(ingredientId: string): Promise<string[]> {
-    const rows = await this.db.all(
-      `SELECT recipe_id FROM recipe_ingredients WHERE ingredient_id=?`,
-      ingredientId,
-    );
-    return rows.map((row: any) => row.recipe_id);
+  getRecipesByIngredient(ingredientId: string): Promise<Recipe[]> {
+    return this.getLeftByRight(ingredientId);
   }
 }
