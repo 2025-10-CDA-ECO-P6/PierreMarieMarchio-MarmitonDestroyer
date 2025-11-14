@@ -1,5 +1,4 @@
-import { User } from "../../common/entities";
-
+import { User } from '../../../common/entities';
 
 export interface AuthRepository {
   findByEmail(email: string): Promise<User | null>;

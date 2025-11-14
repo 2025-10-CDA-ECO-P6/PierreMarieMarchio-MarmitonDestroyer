@@ -14,7 +14,7 @@ export class RecipeSQLiteRepository implements RecipeRepository {
     return this.context.getDb();
   }
 
-  async add(recipe: Recipe): Promise<void> {
+  async create(recipe: Recipe): Promise<void> {
     await this.db.run(
       `INSERT INTO recipes (id, documentId, Title, preparation_time, dificulty, budget, description, createdAt, updatedAt, publishedAt)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,

@@ -37,7 +37,7 @@ export class CreateRecipeUseCase
       recipe.ingredients,
     );
 
-    await this.recipeRepo.add(newRecipe);
+    await this.recipeRepo.create(newRecipe);
 
     return { data: newRecipe };
   }

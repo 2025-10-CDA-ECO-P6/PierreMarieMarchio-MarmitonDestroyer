@@ -1,4 +1,4 @@
-export interface MetaInput {
+export interface MetaContext {
   filters?: { titleContains?: string };
   limit: number;
   offset: number;

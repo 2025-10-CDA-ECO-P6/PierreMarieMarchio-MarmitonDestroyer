@@ -1,3 +1,3 @@
-export { AuthRepository } from './Auth.repository';
-export { AuthService } from './Auth.service';
-export { JWTService } from './JWT.service';
+export { AuthRepository } from './repositories/Auth.repository';
+export { AuthService } from './services/Auth.service';
+export { JWTService } from './services/JWT.service';

@@ -7,5 +7,5 @@ export interface RecipeIngredientRepository {
     ingredientId: string,
   ): Promise<void>;
   getIngredientsByRecipe(recipeId: string): Promise<Ingredient[]>;
-  getRecipesByIngredient(ingredientId: string): Promise<string[]>; // ids de recettes
+  getRecipesByIngredient(ingredientId: string): Promise<string[]>;
 }

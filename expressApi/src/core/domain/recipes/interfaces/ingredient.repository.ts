@@ -1,9 +1,8 @@
-import { Ingredient } from "../entities";
+import { BaseRepository, DocumentIdRepository } from '../../common/bases';
+import { Ingredient } from '../entities';
 
-export interface IngredientRepository {
-  add(ingredient: Ingredient): Promise<void>;
-  findById(id: string): Promise<Ingredient | null>;
-  findAll(): Promise<Ingredient[]>;
-  update(ingredient: Ingredient): Promise<void>;
-  delete(id: string): Promise<void>;
+export interface IngredientRepository
+  extends BaseRepository<Ingredient>,
+    DocumentIdRepository<Ingredient> {
+  findWithRecipes(id: string): Promise<Ingredient | null>;
 }

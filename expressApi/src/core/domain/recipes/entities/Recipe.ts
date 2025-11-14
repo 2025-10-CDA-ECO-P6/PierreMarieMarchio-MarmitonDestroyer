@@ -1,24 +1,21 @@
+import { BaseEntity } from '../../common/bases';
 import { Ingredient } from './Ingredient';
 
-export class Recipe {
-  id: string;
-  documentId: string;
-  Title: string;
-  preparation_time: number;
-  dificulty: number;
+export class Recipe extends BaseEntity {
+  title: string;
+  preparationTime: number;
+  difficulty: number;
   budget: number;
   description: string;
-  createdAt: Date;
-  updatedAt: Date;
   publishedAt: Date | null;
   ingredients?: Ingredient[];
 
   constructor(
     id: string,
     documentId: string,
-    Title: string,
-    preparation_time: number,
-    dificulty: number,
+    title: string,
+    preparationTime: number,
+    difficulty: number,
     budget: number,
     description: string,
     createdAt: Date,
@@ -26,15 +23,12 @@ export class Recipe {
     publishedAt: Date | null,
     ingredients?: Ingredient[],
   ) {
-    this.id = id;
-    this.documentId = documentId;
-    this.Title = Title;
-    this.preparation_time = preparation_time;
-    this.dificulty = dificulty;
+    super(id, documentId, createdAt, updatedAt);
+    this.title = title;
+    this.preparationTime = preparationTime;
+    this.difficulty = difficulty;
     this.budget = budget;
     this.description = description;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
     this.publishedAt = publishedAt;
     this.ingredients = ingredients;
   }
