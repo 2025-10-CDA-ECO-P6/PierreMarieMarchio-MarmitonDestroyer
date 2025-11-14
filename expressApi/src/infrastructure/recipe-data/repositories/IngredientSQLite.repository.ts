@@ -1,6 +1,6 @@
 import { Database } from 'sqlite';
-import { Ingredient } from '../../../core/domain/features/recipes/entities';
-import { IngredientRepository } from '../../../core/domain/features/recipes/interfaces';
+import { Ingredient } from '../../../core/domain/recipes/entities';
+import { IngredientRepository } from '../../../core/domain/recipes/interfaces';
 import { RecipeDbContext } from '../persistence/contexts/RecipeDbContext';
 
 export class IngredientSQLiteRepository implements IngredientRepository {

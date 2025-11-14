@@ -1,13 +1,13 @@
-import { GetIngredientByIdUseCase } from "../../core/application/features/recipes/usecase";
-import { AddIngredientToRecipeUseCase } from "../../core/application/features/recipes/usecase/ingredient/AddIngredientToRecipe.usecase";
-import { CreateIngredientUseCase } from "../../core/application/features/recipes/usecase/ingredient/Create.usecase";
-import { DeleteIngredientUseCase } from "../../core/application/features/recipes/usecase/ingredient/DeleteIngredient.usecase";
-import { GetAllIngredientsUseCase } from "../../core/application/features/recipes/usecase/ingredient/GetAll.usecase";
-import { GetIngredientsByRecipeUseCase } from "../../core/application/features/recipes/usecase/ingredient/GetIngredientsByRecipe.usecase";
-import { RemoveIngredientFromRecipeUseCase } from "../../core/application/features/recipes/usecase/ingredient/RemoveIngredientFromRecipe.usecase";
-import { UpdateIngredientUseCase } from "../../core/application/features/recipes/usecase/ingredient/UpdateIngredient.usecase";
-import { container } from "../app";
-import { asyncHandler } from "../extensions/AsyncHandler.extension";
+import { GetIngredientByIdUseCase } from '../../core/application/recipes/usecase';
+import { AddIngredientToRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/AddIngredientToRecipe.usecase';
+import { CreateIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/Create.usecase';
+import { DeleteIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/DeleteIngredient.usecase';
+import { GetAllIngredientsUseCase } from '../../core/application/recipes/usecase/ingredient/GetAll.usecase';
+import { GetIngredientsByRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/GetIngredientsByRecipe.usecase';
+import { RemoveIngredientFromRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/RemoveIngredientFromRecipe.usecase';
+import { UpdateIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/UpdateIngredient.usecase';
+import { container } from '../app';
+import { asyncHandler } from '../extensions/AsyncHandler.extension';
 
 export const createIngredientController = asyncHandler(async (req, res) => {
   const useCase = container.inject<CreateIngredientUseCase>(

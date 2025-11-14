@@ -1,26 +1,30 @@
-import { container } from '../app';
+import { Query } from '../../core/application/common/dto';
 import {
   GetAllRecipesUseCase,
   GetRecipeByIdUseCase,
   CreateRecipeUseCase,
   UpdateRecipeUseCase,
   DeleteRecipeUseCase,
-} from '../../core/application/features/recipes/usecase';
+} from '../../core/application/recipes/usecase';
+import { container } from '../app';
+
 import { asyncHandler } from '../extensions/AsyncHandler.extension';
+import { queryParser } from '../utils/queryParser';
 
 export const getAllRecipesController = asyncHandler(async (req, res) => {
   const useCase = container.inject<GetAllRecipesUseCase>(
     'GetAllRecipesUseCase',
   );
 
-  const filters = {
-    afterDate: req.query.afterDate
-      ? new Date(req.query.afterDate as string)
-      : undefined,
-    titleContains: req.query.titleContains as string | undefined,
-  };
+  const { pagination, filters, sort, populate } = queryParser(req.query);
 
-  const response = await useCase.execute(filters);
+  const response = await useCase.execute({
+    pagination,
+    filters,
+    sort,
+    populate,
+  });
+
   res.json(response);
 });
 
@@ -28,7 +32,14 @@ export const getRecipeByIdController = asyncHandler(async (req, res) => {
   const useCase = container.inject<GetRecipeByIdUseCase>(
     'GetRecipeByIdUseCase',
   );
-  const response = await useCase.execute(req.params.id);
+
+  const populate = req.query.populate === '*' ? true : false;
+
+  const response = await useCase.execute({
+    id: req.params.id,
+    populate,
+  });
+
   res.json(response);
 });
 

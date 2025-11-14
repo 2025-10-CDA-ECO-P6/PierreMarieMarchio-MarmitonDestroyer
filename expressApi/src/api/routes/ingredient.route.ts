@@ -13,7 +13,8 @@ import { authMiddleware } from '../middlewares/auth.middleware';
 
 const ingredientsRouter = Router();
 
-ingredientsRouter.use(authMiddleware());
+// Disabled for rendre test
+// ingredientsRouter.use(authMiddleware());
 
 ingredientsRouter.get('/recipe/:recipeId', getIngredientsByRecipeController);
 

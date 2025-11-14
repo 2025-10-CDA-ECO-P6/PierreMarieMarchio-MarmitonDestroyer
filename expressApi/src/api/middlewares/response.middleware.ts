@@ -9,15 +9,34 @@ export const responseMiddleware = (
 
   res.json = (body: any) => {
     const isAuthRoute = req.originalUrl.startsWith('/api/auth');
-
     if (isAuthRoute) return originalJson(body);
 
-    if (body && (body.error || body.success === false))
+    if (!body) return originalJson({ success: true, data: null });
+
+    if (body.error || body.success === false) return originalJson(body);
+
+    if (body.success === true && (body.data || body.meta))
       return originalJson(body);
 
-    if (body?.success === true && body.data) return originalJson(body);
+    if (body.data && body.meta) {
+      return originalJson({
+        success: true,
+        data: body.data,
+        meta: body.meta,
+      });
+    }
 
-    return originalJson({ success: true, data: body });
+    if (body.data) {
+      return originalJson({
+        success: true,
+        data: body.data,
+      });
+    }
+
+    return originalJson({
+      success: true,
+      data: body,
+    });
   };
 
   next();

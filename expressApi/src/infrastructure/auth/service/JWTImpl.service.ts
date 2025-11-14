@@ -1,6 +1,6 @@
 import jwt, { Secret } from 'jsonwebtoken';
-import { JWTService } from '../../../core/domain/features/auth/interfaces';
 import config from '../../../.config/config';
+import { JWTService } from '../../../core/domain/auth/interfaces';
 
 export class JWTServiceImpl implements JWTService {
   private readonly secret: Secret;

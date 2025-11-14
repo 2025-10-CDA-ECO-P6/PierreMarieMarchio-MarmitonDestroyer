@@ -1,7 +1,7 @@
 import { Database } from 'sqlite';
-import { AuthRepository } from '../../../core/domain/features/auth/interfaces';
 import { User } from '../../../core/domain/common/entities/User';
 import { AuthDbContext } from '../persistence/contexts/AuthDbContext';
+import { AuthRepository } from '../../../core/domain/auth/interfaces';
 
 export class AuthSQLiteRepository implements AuthRepository {
   constructor(private readonly context: AuthDbContext) {}

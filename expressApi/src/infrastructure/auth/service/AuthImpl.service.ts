@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
-import {
-  AuthRepository,
-  AuthService,
-  JWTService,
-} from '../../../core/domain/features/auth/interfaces';
 import { User } from '../../../core/domain/common/entities';
+import {
+  AuthService,
+  AuthRepository,
+  JWTService,
+} from '../../../core/domain/auth/interfaces';
 
 export class AuthServiceImpl implements AuthService {
   constructor(

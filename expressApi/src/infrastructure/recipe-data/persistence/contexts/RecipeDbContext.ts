@@ -1,6 +1,7 @@
 import { ModuleDbContext } from '../../../../shared/migration-system/ModuleDbContext';
 import { AppDbContext } from '../../../common/persistence/contexts/AppDbContext';
-import { AddCreatedAtToRecipesTable } from '../migrations/AddCreatedAtToRecipesTable';
+import { AddCreatedAtToRecipesTable } from '../migrations/addCreatedAtToRecipesTable';
+import { AddStrapiFieldsToRecipes } from '../migrations/addStrapiFieldsToRecipes';
 import { CreateIngredientTable } from '../migrations/CreateIngredientTable';
 import { CreateRecipeTableMigration } from '../migrations/CreateRecipeTable';
 
@@ -11,6 +12,7 @@ export class RecipeDbContext extends ModuleDbContext {
       CreateRecipeTableMigration,
       CreateIngredientTable,
       AddCreatedAtToRecipesTable,
+      AddStrapiFieldsToRecipes,
     ]);
   }
 }

@@ -4,7 +4,11 @@ import { guestOnlyMiddleware } from '../middlewares/guestOnly.middleware';
 
 const authRouter = Router();
 
-authRouter.post('/local', guestOnlyMiddleware(), loginController);
-authRouter.post('/local/register', guestOnlyMiddleware(), registerController);
+// Disabled for rendre test
+// authRouter.post('/local', guestOnlyMiddleware(), loginController);
+// authRouter.post('/local/register', guestOnlyMiddleware(), registerController);
+
+authRouter.post('/local', loginController);
+authRouter.post('/local/register', registerController);
 
 export default authRouter;

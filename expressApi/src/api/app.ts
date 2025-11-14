@@ -5,12 +5,13 @@ import { registerAuthInfrastructureService } from '../infrastructure/auth/Servic
 import { registerRecipeDataInfrastructureService } from '../infrastructure/recipe-data/ServiceRegister';
 import { DIContainer } from '../shared/dependency-injection/DIContainer';
 import { registerCommonApplicationServices } from '../core/application/common/ServiceRegister';
-import { registerAuthApplicationServices } from '../core/application/features/auth/ServiceRegister';
-import { registerRecipeApplicationServices } from '../core/application/features/recipes/ServiceRegister';
+
 import { AppDbContext } from '../infrastructure/common/persistence/contexts/AppDbContext';
 import { RecipeDbContext } from '../infrastructure/recipe-data/persistence/contexts/RecipeDbContext';
 import { responseMiddleware } from './middlewares/response.middleware';
 import { errorMiddleware } from './middlewares/error.middleware';
+import { registerAuthApplicationServices } from '../core/application/auth/ServiceRegister';
+import { registerRecipeApplicationServices } from '../core/application/recipes/ServiceRegister';
 
 export const container = new DIContainer();
 

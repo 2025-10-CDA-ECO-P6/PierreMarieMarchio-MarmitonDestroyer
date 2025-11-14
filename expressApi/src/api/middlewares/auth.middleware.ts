@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { JWTService } from '../../core/domain/features/auth/interfaces';
+
 import { container } from '../app';
 import { ExpressUserContext } from '../contexts/ExpressUserContext';
 import { AuthenticationError } from '../extensions/AuthenticationError.extension';
+import { JWTService } from '../../core/domain/auth/interfaces';
 
 export const authMiddleware = () => {
   return async (req: Request, _res: Response, next: NextFunction) => {
