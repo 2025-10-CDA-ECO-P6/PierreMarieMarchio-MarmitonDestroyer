@@ -4,7 +4,7 @@ import { UserSQLiteRepository } from './repositories';
 
 export function registerComonInfrastructureService(container: DIContainer) {
   container.singleton('AppDbContext', () => new AppDbContext());
-  container.register(
+  container.scoped(
     'UserRepository',
     (c) => new UserSQLiteRepository(c.inject('AppDbContext')),
   );

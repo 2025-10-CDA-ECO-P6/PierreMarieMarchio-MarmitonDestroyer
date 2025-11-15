@@ -1,4 +1,6 @@
 import { DocumentIdRepository } from '../../../core/domain/common/bases';
+import { QueryContext } from '../../../core/domain/common/interfaces';
+import { PaginatedResult } from '../../../core/domain/common/interfaces/contracts/pagination-result';
 import { Ingredient } from '../../../core/domain/recipes/entities';
 import {
   IngredientRepository,
@@ -15,6 +17,7 @@ export class IngredientSQLiteRepository
   implements IngredientRepository
 {
   protected tableName = 'ingredients';
+
   private documentIdRepo: DocumentIdRepository<Ingredient>;
   private recipeIngredientRepo: RecipeIngredientRepository;
 
@@ -43,21 +46,41 @@ export class IngredientSQLiteRepository
     );
   }
 
-  async findWithRecipes(id: string): Promise<Ingredient | null> {
-    const ingredient = await this.findById(id);
-    if (!ingredient) return null;
+  async findWithRecipes(
+    id: string,
+    ctx: QueryContext,
+  ): Promise<PaginatedResult<Ingredient>> {
+    const ingredient = await this.findById(id, ctx.getPopulate() ?? undefined);
+    if (!ingredient) {
+      return { items: [], total: 0, limit: 0, offset: 0 };
+    }
 
-    const recipes = await this.recipeIngredientRepo.getRecipesByIngredient(id);
-    ingredient.recipies = recipes;
+    const recipes = await this.recipeIngredientRepo.getRecipesByIngredient(
+      id,
+      ctx,
+    );
 
-    return ingredient;
+    ingredient.recipies = recipes.items;
+
+    return {
+      items: [ingredient],
+      total: 1,
+      limit: ctx.getLimit() ?? 0,
+      offset: ctx.getOffset() ?? 0,
+    };
   }
 
-  findByDocumentId(documentId: string): Promise<Ingredient | null> {
-    return this.documentIdRepo.findByDocumentId(documentId);
+  findByDocumentId(
+    documentId: string,
+    populate?: boolean,
+  ): Promise<Ingredient | null> {
+    return this.documentIdRepo.findByDocumentId(documentId, populate);
   }
 
-  findAllByDocumentIds(documentIds: string[]): Promise<Ingredient[]> {
-    return this.documentIdRepo.findAllByDocumentIds(documentIds);
+  findAllByDocumentIds(
+    documentIds: string[],
+    ctx: QueryContext,
+  ): Promise<PaginatedResult<Ingredient>> {
+    return this.documentIdRepo.findAllByDocumentIds(documentIds, ctx);
   }
 }

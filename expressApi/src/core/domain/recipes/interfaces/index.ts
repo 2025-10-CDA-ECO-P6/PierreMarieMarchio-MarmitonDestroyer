@@ -1,4 +1,3 @@
-export { RecipeRepository } from './recipe.repository';
-export { IngredientRepository } from './ingredient.repository';
-export { RecipeIngredientRepository } from './RecipeIngredient.repository';
-
+export { RecipeRepository } from './repositories/Recipe.repository';
+export { IngredientRepository } from './repositories/Ingredient.repository';
+export { RecipeIngredientRepository } from './repositories/RecipeIngredient.repository';

@@ -1,3 +1,5 @@
+import { QueryContext } from '../../../core/domain/common/interfaces';
+import { PaginatedResult } from '../../../core/domain/common/interfaces/contracts/pagination-result';
 import { Ingredient, Recipe } from '../../../core/domain/recipes/entities';
 import { RecipeIngredientRepository } from '../../../core/domain/recipes/interfaces';
 import { DbContext } from '../../../shared/migration-system/DbContext';
@@ -8,6 +10,10 @@ export class RecipeIngredientSQLiteRepository
   implements RecipeIngredientRepository
 {
   protected tableName = 'recipes_ingredients';
+  protected leftTable = 'recipes';
+  protected rightTable = 'ingredients';
+  protected leftIdColumn = 'recipeId';
+  protected rightIdColumn = 'ingredientId';
 
   constructor(context: DbContext) {
     super(context);
@@ -49,11 +55,17 @@ export class RecipeIngredientSQLiteRepository
     return this.removeRelation(recipeId, ingredientId);
   }
 
-  getIngredientsByRecipe(recipeId: string): Promise<Ingredient[]> {
-    return this.getRightByLeft(recipeId);
+  getIngredientsByRecipe(
+    recipeId: string,
+    ctx: QueryContext,
+  ): Promise<PaginatedResult<Ingredient>> {
+    return this.getRightByLeft(recipeId, ctx);
   }
 
-  getRecipesByIngredient(ingredientId: string): Promise<Recipe[]> {
-    return this.getLeftByRight(ingredientId);
+  getRecipesByIngredient(
+    ingredientId: string,
+    ctx: QueryContext,
+  ): Promise<PaginatedResult<Recipe>> {
+    return this.getLeftByRight(ingredientId, ctx);
   }
 }

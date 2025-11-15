@@ -13,7 +13,7 @@ export function registerRecipeDataInfrastructureService(
     'RecipeDbContext',
     (c) => new RecipeDbContext(c.inject('AppDbContext')),
   );
-  container.register(
+  container.scoped(
     'RecipeRepository',
     (c) =>
       new RecipeSQLiteRepository(
@@ -21,7 +21,7 @@ export function registerRecipeDataInfrastructureService(
         c.inject('RecipeIngredientRepository'),
       ),
   );
-  container.register(
+  container.scoped(
     'IngredientRepository',
     (c) =>
       new IngredientSQLiteRepository(
@@ -29,7 +29,7 @@ export function registerRecipeDataInfrastructureService(
         c.inject('RecipeIngredientRepository'),
       ),
   );
-  container.register(
+  container.scoped(
     'RecipeIngredientRepository',
     (c) => new RecipeIngredientSQLiteRepository(c.inject('RecipeDbContext')),
   );

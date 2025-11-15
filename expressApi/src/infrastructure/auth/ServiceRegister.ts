@@ -9,12 +9,12 @@ export function registerAuthInfrastructureService(container: DIContainer) {
     'AuthDbContext',
     (c) => new AuthDbContext(c.inject('AppDbContext')),
   );
-  container.register(
+  container.scoped(
     'AuthRepository',
     (c) => new AuthSQLiteRepository(c.inject('AuthDbContext')),
   );
-  container.register('JWTService', () => new JWTServiceImpl());
-  container.register(
+  container.scoped('JWTService', () => new JWTServiceImpl());
+  container.scoped(
     'AuthService',
     (c) =>
       new AuthServiceImpl(c.inject('AuthRepository'), c.inject('JWTService')),
