@@ -5,12 +5,21 @@ import { NotFoundError } from '../../exceptions';
 import { UseCase } from '../../interfaces';
 
 export interface UpdateUserResponse {
-  data: UserFullDTO | null;
+  data: { name?: string; email?: string; password?: string };
+}
+
+export interface UpdateUserRequest {
+  name?: string;
+  email?: string;
+  password?: string;
 }
 
 export class UpdateUserUseCase
   implements
-    UseCase<{ id: string; input: Partial<UserDTO> }, UpdateUserResponse>
+    UseCase<
+      { id: string; input: Partial<UpdateUserRequest> },
+      UpdateUserResponse
+    >
 {
   constructor(private readonly userRepo: UserRepository) {}
 
@@ -19,24 +28,30 @@ export class UpdateUserUseCase
     input,
   }: {
     id: string;
-    input: Partial<UserDTO>;
+    input: Partial<UpdateUserRequest>;
   }): Promise<UpdateUserResponse> {
     const existing = await this.userRepo.findById(id);
     if (!existing) throw new NotFoundError('User not found');
 
     const updated = new User(
-      id,
-      input.name ?? existing.username,
+      existing.id,
+      input.name ?? existing.name,
       input.email ?? existing.email,
-      existing.password,
+      input.password ?? existing.password,
       existing.createdAt,
       new Date(),
     );
 
     await this.userRepo.update(updated);
 
+    return { data: this.toDTO(updated) };
+  }
+
+  private toDTO(user: User): UserFullDTO {
     return {
-      data: { id: updated.id, name: updated.username, email: updated.email },
+      id: user.id,
+      name: user.name,
+      email: user.email,
     };
   }
 }

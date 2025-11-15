@@ -8,9 +8,13 @@ export interface UpdateRecipeResponse {
   data: RecipeFullDTO | null;
 }
 
+export interface UpdateRecipeRequest {
+  data: Partial<RecipeDTO>;
+}
+
 export class UpdateRecipeUseCase
   implements
-    UseCase<{ id: string; input: Partial<RecipeDTO> }, UpdateRecipeResponse>
+    UseCase<{ id: string; input: UpdateRecipeRequest }, UpdateRecipeResponse>
 {
   constructor(private readonly recipeRepo: RecipeRepository) {}
 
@@ -19,26 +23,43 @@ export class UpdateRecipeUseCase
     input,
   }: {
     id: string;
-    input: Partial<RecipeDTO>;
+    input: UpdateRecipeRequest;
   }): Promise<UpdateRecipeResponse> {
-    const existing = await this.recipeRepo.findById(id);
+    const existing = await this.recipeRepo.findByDocumentId(id);
     if (!existing) throw new NotFoundError('Recipe not found');
 
     const updated = new Recipe(
-      id,
+      existing.id,
       existing.documentId,
-      input.Title ?? existing.Title,
-      input.preparation_time ?? existing.preparation_time,
-      input.dificulty ?? existing.dificulty,
-      input.budget ?? existing.budget,
-      input.description ?? existing.description,
+      input.data.Title ?? existing.title,
+      input.data.preparation_time ?? existing.preparationTime,
+      input.data.dificulty ?? existing.difficulty,
+      input.data.budget ?? existing.budget,
+      input.data.description ?? existing.description,
       existing.createdAt,
-      new Date(), // updatedAt
-      input.publishedAt ?? existing.publishedAt,
-      input.ingredients ?? existing.ingredients,
+      new Date(),
+      input.data.publishedAt ?? existing.publishedAt,
     );
 
     await this.recipeRepo.update(updated);
-    return { data: updated };
+
+    return {
+      data: this.toDTO(updated),
+    };
+  }
+
+  private toDTO(recipe: Recipe): RecipeFullDTO {
+    return {
+      id: recipe.id,
+      documentId: recipe.documentId,
+      Title: recipe.title,
+      preparation_time: recipe.preparationTime,
+      dificulty: recipe.difficulty,
+      budget: recipe.budget,
+      description: recipe.description,
+      createdAt: recipe.createdAt,
+      updatedAt: recipe.updatedAt,
+      publishedAt: recipe.publishedAt,
+    };
   }
 }

@@ -49,25 +49,19 @@ export class IngredientSQLiteRepository
   async findWithRecipes(
     id: string,
     ctx: QueryContext,
-  ): Promise<PaginatedResult<Ingredient>> {
+  ): Promise<Ingredient | null> {
     const ingredient = await this.findById(id, ctx.getPopulate() ?? undefined);
-    if (!ingredient) {
-      return { items: [], total: 0, limit: 0, offset: 0 };
+    if (!ingredient) return null;
+
+    if (ctx.getPopulate()) {
+      const recipes = await this.recipeIngredientRepo.getRecipesByIngredient(
+        id,
+        ctx,
+      );
+      ingredient.recipies = recipes.items;
     }
 
-    const recipes = await this.recipeIngredientRepo.getRecipesByIngredient(
-      id,
-      ctx,
-    );
-
-    ingredient.recipies = recipes.items;
-
-    return {
-      items: [ingredient],
-      total: 1,
-      limit: ctx.getLimit() ?? 0,
-      offset: ctx.getOffset() ?? 0,
-    };
+    return ingredient;
   }
 
   findByDocumentId(

@@ -1,13 +1,12 @@
-import { RecipeIngredientRepository } from "../../../../domain/recipes/interfaces";
-import { UseCase } from "../../../common/interfaces";
-import { RemoveIngredientFromRecipeDTO } from "../../dto";
-
+import { RecipeIngredientRepository } from '../../../../domain/recipes/interfaces';
+import { UseCase } from '../../../common/interfaces';
+import { RemoveIngredientFromRecipeDTO } from '../../dto';
 
 export interface RemoveIngredientFromRecipeResponse {
   success: boolean;
 }
 
-export class RemoveIngredientFromRecipeUseCase
+export class RemoveIngredientRecipeUseCase
   implements
     UseCase<RemoveIngredientFromRecipeDTO, RemoveIngredientFromRecipeResponse>
 {

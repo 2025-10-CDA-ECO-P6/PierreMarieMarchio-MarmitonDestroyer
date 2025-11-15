@@ -24,7 +24,7 @@ export class RegisterUseCase
       const publicUser: UserFullDTO = {
         id: user.id,
         email: user.email,
-        name: user.username,
+        name: user.name,
       };
 
       return { token, user: publicUser };

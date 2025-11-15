@@ -12,10 +12,13 @@ export class DeleteRecipeUseCase
   constructor(private readonly recipeRepo: RecipeRepository) {}
 
   async execute(id: string): Promise<DeleteRecipeResponse> {
-    const recipe = await this.recipeRepo.findById(id);
-    if (!recipe) throw new NotFoundError('Recipe not found');
+    const existing = await this.recipeRepo.findByDocumentId(id);
+    if (!existing) throw new NotFoundError('Recipe not found');
+
+    // TODO: Add dellete all relation to join repository
 
     await this.recipeRepo.delete(id);
+
     return { success: true };
   }
 }

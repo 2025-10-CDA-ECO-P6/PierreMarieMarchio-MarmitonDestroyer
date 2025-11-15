@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { User } from '../../../../domain/common/entities';
 import bcrypt from 'bcryptjs';
-import { UserFullDTO } from '../../dto';
+import { UserDTO, UserFullDTO } from '../../dto';
 import { UseCase } from '../../interfaces';
 import { UserRepository } from '../../../../domain/common/interfaces';
 import { ValidationError } from '../../exceptions';
@@ -21,27 +21,30 @@ export class CreateUserUseCase
 {
   constructor(private readonly userRepo: UserRepository) {}
 
-  async execute(user: CreateUserRequest): Promise<CreateUserResponse> {
-    if (!user.name || !user.email || !user.password) {
+  async execute(input: CreateUserRequest): Promise<CreateUserResponse> {
+    if (!input.name || !input.email || !input.password) {
       throw new ValidationError('Name, email and password are required');
     }
 
-    const now = new Date();
-    const hashedPassword = await bcrypt.hash(user.password, 10);
-
-    const newUser = new User(
+    const user = new User(
       randomUUID(),
-      user.name,
-      user.email,
-      hashedPassword,
-      now,
-      now,
+      input.name,
+      input.email,
+      input.password,
+      new Date(),
+      new Date(),
     );
 
-    await this.userRepo.add(newUser);
+    await this.userRepo.create(user);
 
+    return { data: this.toDTO(user) };
+  }
+
+  private toDTO(user: User): UserFullDTO {
     return {
-      data: { id: newUser.id, name: newUser.username, email: newUser.email },
+      id: user.id,
+      name: user.name,
+      email: user.email,
     };
   }
 }

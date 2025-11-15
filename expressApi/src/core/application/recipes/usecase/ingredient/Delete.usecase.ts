@@ -15,7 +15,10 @@ export class DeleteIngredientUseCase
     const existing = await this.ingredientRepo.findById(id);
     if (!existing) throw new NotFoundError('Ingredient not found');
 
+    // TODO: Add dellete all relation to join repository
+
     await this.ingredientRepo.delete(id);
+
     return { success: true };
   }
 }

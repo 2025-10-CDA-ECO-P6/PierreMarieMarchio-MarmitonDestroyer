@@ -14,31 +14,47 @@ export interface CreateRecipeResponse {
 }
 
 export class CreateRecipeUseCase
-  implements UseCase<RecipeDTO, CreateRecipeResponse>
+  implements UseCase<CreateRecipeRequest, CreateRecipeResponse>
 {
   constructor(private readonly recipeRepo: RecipeRepository) {}
 
-  async execute(recipe: RecipeDTO): Promise<CreateRecipeResponse> {
-    if (!recipe.Title || !recipe.description) {
+  async execute(recipe: CreateRecipeRequest): Promise<CreateRecipeResponse> {
+    if (!recipe.data.Title || !recipe.data.description) {
       throw new ValidationError('Title and description are required');
     }
 
     const newRecipe = new Recipe(
       randomUUID(),
-      recipe.documentId ?? randomUUID(),
-      recipe.Title,
-      recipe.preparation_time,
-      recipe.dificulty,
-      recipe.budget,
-      recipe.description,
+      randomUUID(),
+      recipe.data.Title,
+      recipe.data.preparation_time,
+      recipe.data.dificulty,
+      recipe.data.budget,
+      recipe.data.description,
       new Date(),
       new Date(),
-      recipe.publishedAt ?? null,
-      recipe.ingredients,
+      recipe.data.publishedAt ?? null,
     );
 
     await this.recipeRepo.create(newRecipe);
 
-    return { data: newRecipe };
+    return {
+      data: this.toDTO(newRecipe),
+    };
+  }
+
+  private toDTO(recipe: Recipe): RecipeFullDTO {
+    return {
+      id: recipe.id,
+      documentId: recipe.documentId,
+      Title: recipe.title,
+      preparation_time: recipe.preparationTime,
+      dificulty: recipe.difficulty,
+      budget: recipe.budget,
+      description: recipe.description,
+      createdAt: recipe.createdAt,
+      updatedAt: recipe.updatedAt,
+      publishedAt: recipe.publishedAt,
+    };
   }
 }

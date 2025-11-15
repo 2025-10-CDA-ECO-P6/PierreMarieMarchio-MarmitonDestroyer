@@ -9,3 +9,7 @@ export class ValidationError extends Error {
 export class ConflictError extends Error {
   status = 409;
 }
+
+export class AuthenticationError extends Error {
+  status = 401;
+}

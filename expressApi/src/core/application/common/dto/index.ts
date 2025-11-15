@@ -1,4 +1,5 @@
-export { UserDTO } from './userDTO';
-export { UserFullDTO } from './userFullDTO';
-export { Meta, PaginationMeta } from './meta';
-export { Query } from './query'
+export { UserDTO, UserFullDTO } from './UserDTO';
+export {
+  MetaDTO as Meta,
+  PaginationMetaDTO as PaginationMeta,
+} from './MetaDTO';

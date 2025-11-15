@@ -1,11 +1,11 @@
 import { GetIngredientByIdUseCase } from '../../core/application/recipes/usecase';
-import { AddIngredientToRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/AddIngredientToRecipe.usecase';
+import { AddIngredientRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/AddIngredientRecipe.usecase';
 import { CreateIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/Create.usecase';
-import { DeleteIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/DeleteIngredient.usecase';
+import { DeleteIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/Delete.usecase';
 import { GetAllIngredientsUseCase } from '../../core/application/recipes/usecase/ingredient/GetAll.usecase';
 import { GetIngredientsByRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/GetIngredientsByRecipe.usecase';
-import { RemoveIngredientFromRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/RemoveIngredientFromRecipe.usecase';
-import { UpdateIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/UpdateIngredient.usecase';
+import { RemoveIngredientRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/RemoveIngredientRecipe.usecase';
+import { UpdateIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/Update.usecase';
 import { container } from '../app';
 import { asyncHandler } from '../common/utils/asyncHandler';
 
@@ -54,7 +54,7 @@ export const deleteIngredientController = asyncHandler(async (req, res) => {
 
 export const addIngredientToRecipeController = asyncHandler(
   async (req, res) => {
-    const useCase = container.inject<AddIngredientToRecipeUseCase>(
+    const useCase = container.inject<AddIngredientRecipeUseCase>(
       'AddIngredientToRecipeUseCase',
     );
     const response = await useCase.execute({
@@ -67,7 +67,7 @@ export const addIngredientToRecipeController = asyncHandler(
 
 export const removeIngredientFromRecipeController = asyncHandler(
   async (req, res) => {
-    const useCase = container.inject<RemoveIngredientFromRecipeUseCase>(
+    const useCase = container.inject<RemoveIngredientRecipeUseCase>(
       'RemoveIngredientFromRecipeUseCase',
     );
     const response = await useCase.execute({

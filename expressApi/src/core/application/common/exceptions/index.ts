@@ -1,1 +1,6 @@
-export { ValidationError, NotFoundError, ConflictError } from './http.exceptions';
+export {
+  ValidationError,
+  NotFoundError,
+  ConflictError,
+  AuthenticationError,
+} from './http.exceptions';

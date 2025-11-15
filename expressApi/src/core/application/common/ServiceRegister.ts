@@ -8,23 +8,23 @@ import {
 } from './usecase';
 
 export function registerCommonApplicationServices(container: DIContainer) {
-  container.register(
+  container.scoped(
     'CreateUserUseCase',
     (c) => new CreateUserUseCase(c.inject('UserRepository')),
   );
-  container.register(
+  container.scoped(
     'DeleteUserUseCase',
     (c) => new DeleteUserUseCase(c.inject('UserRepository')),
   );
-  container.register(
+  container.scoped(
     'GetAllUsersUseCase',
     (c) => new GetAllUsersUseCase(c.inject('UserRepository')),
   );
-  container.register(
+  container.scoped(
     'GetUserByIdUseCase',
     (c) => new GetUserByIdUseCase(c.inject('UserRepository')),
   );
-  container.register(
+  container.scoped(
     'UpdateUserUseCase',
     (c) => new UpdateUserUseCase(c.inject('UserRepository')),
   );

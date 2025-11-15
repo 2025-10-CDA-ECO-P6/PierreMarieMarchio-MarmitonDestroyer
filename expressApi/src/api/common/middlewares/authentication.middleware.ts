@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { container } from '../../app';
 import { UserContextImpl } from '../contexts/UserContext';
 import { JWTService } from '../../../core/domain/auth/interfaces';
+import { AuthenticationError } from '../../../core/application/common/exceptions';
 
 export const authentication = () => {
   return async (req: Request, _res: Response, next: NextFunction) => {
@@ -33,6 +34,3 @@ export const authentication = () => {
   };
 };
 
-class AuthenticationError extends Error {
-  status = 401;
-}

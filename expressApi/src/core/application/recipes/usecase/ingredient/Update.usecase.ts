@@ -1,3 +1,4 @@
+import { Ingredient } from '../../../../domain/recipes/entities';
 import { IngredientRepository } from '../../../../domain/recipes/interfaces';
 import { NotFoundError, ValidationError } from '../../../common/exceptions';
 import { UseCase } from '../../../common/interfaces';
@@ -21,15 +22,29 @@ export class UpdateIngredientUseCase
     id,
     data,
   }: UpdateIngredientRequest): Promise<UpdateIngredientResponse> {
-    const existing = await this.ingredientRepo.findById(id);
+    const existing = await this.ingredientRepo.findByDocumentId(id);
     if (!existing) throw new NotFoundError('Ingredient not found');
 
-    if (data.name === '')
+    if (data.name === '') {
       throw new ValidationError('Ingredient name cannot be empty');
+    }
 
-    const updated = { ...existing, name: data.name ?? existing.name };
+    const updated = new Ingredient(
+      existing.id,
+      existing.documentId,
+      data.name ?? existing.name,
+      existing.createdAt,
+      new Date(),
+    );
+
     await this.ingredientRepo.update(updated);
 
-    return { data: { id: updated.id, name: updated.name } };
+    const dto: IngredientFullDTO = {
+      id: updated.id,
+      documentId: updated.documentId,
+      name: updated.name,
+    };
+
+    return { data: dto };
   }
 }

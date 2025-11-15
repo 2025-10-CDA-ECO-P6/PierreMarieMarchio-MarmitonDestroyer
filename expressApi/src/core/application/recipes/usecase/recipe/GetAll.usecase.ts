@@ -1,3 +1,4 @@
+import { QueryContext } from '../../../../domain/common/interfaces';
 import { RecipeRepository } from '../../../../domain/recipes/interfaces';
 import { Meta } from '../../../common/dto';
 import { UseCase } from '../../../common/interfaces';
@@ -8,48 +9,43 @@ export interface GetRecipesResponse {
   meta: Meta;
 }
 
-export interface GetRecipesFilters {
-  pagination?: {
-    page: number;
-    pageSize: number;
-  };
-  filters?: {
-    titleContains?: string;
-  };
-  populate?: boolean;
-  sort?: { field: string; order: 'asc' | 'desc' };
-}
-
 export class GetAllRecipesUseCase
-  implements UseCase<GetRecipesFilters | void, GetRecipesResponse>
+  implements UseCase<QueryContext, GetRecipesResponse>
 {
   constructor(private readonly recipeRepo: RecipeRepository) {}
 
-  async execute(filters?: GetRecipesFilters): Promise<GetRecipesResponse> {
-    const page = filters?.pagination?.page ?? 1;
-    const pageSize = filters?.pagination?.pageSize ?? 25;
-    const offset = (page - 1) * pageSize;
+  async execute(ctx: QueryContext): Promise<GetRecipesResponse> {
+    const result = await this.recipeRepo.findAll(ctx);
 
-    const result = await this.recipeRepo.findAllWithMeta({
-      filters: filters?.filters,
-      limit: pageSize,
-      offset,
-      sort: filters?.sort,
-      populate: filters?.populate,
-    });
-
+    const pageSize = ctx.getLimit() ?? 25;
+    const offset = ctx.getOffset() ?? 0;
+    const page = offset / pageSize + 1;
     const pageCount = Math.ceil(result.total / pageSize);
 
     return {
-      data: result.items,
+      data: result.items.map((r) => this.toFullDTO(r)),
       meta: {
-        pagination: {
-          page,
-          pageSize,
-          pageCount,
-          total: result.total,
-        },
+        page,
+        pageSize,
+        pageCount,
+        total: result.total,
       },
+    };
+  }
+
+  private toFullDTO(recipe: any): RecipeFullDTO {
+    return {
+      id: recipe.id,
+      documentId: recipe.documentId,
+      Title: recipe.title,
+      preparation_time: recipe.preparationTime,
+      dificulty: recipe.difficulty,
+      budget: recipe.budget,
+      description: recipe.description,
+      createdAt: recipe.createdAt,
+      updatedAt: recipe.updatedAt,
+      publishedAt: recipe.publishedAt,
+      ingredients: recipe.ingredients ?? [],
     };
   }
 }

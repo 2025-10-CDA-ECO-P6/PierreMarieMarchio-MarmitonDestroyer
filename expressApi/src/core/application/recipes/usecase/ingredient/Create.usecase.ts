@@ -17,13 +17,22 @@ export class CreateIngredientUseCase
   async execute(request: IngredientDTO): Promise<CreateIngredientResponse> {
     if (!request.name) throw new ValidationError('Ingredient name is required');
 
-    const ingredient = new Ingredient(randomUUID(), request.name);
-    await this.ingredientRepo.add(ingredient);
+    const ingredient = new Ingredient(
+      randomUUID(),
+      request.documentId ?? randomUUID(),
+      request.name,
+      new Date(),
+      new Date(),
+    );
+
+    await this.ingredientRepo.create(ingredient);
 
     const response: IngredientFullDTO = {
       id: ingredient.id,
+      documentId: ingredient.documentId,
       name: ingredient.name,
     };
+
     return { data: response };
   }
 }
