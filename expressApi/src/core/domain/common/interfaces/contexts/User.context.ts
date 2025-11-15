@@ -1,6 +1,10 @@
 export interface UserContext {
+  setUserId(userId: string): void;
   getUserId(): string;
-//   getRoles(): string[];
+
+  setEmail(email: string): void;
   getEmail(): string;
+
+  setName(name: string): void;
   getName(): string;
 }

@@ -2,8 +2,10 @@ import { DIContainer } from './DIContainer';
 
 export type Factory<T> = (container: DIContainer) => T;
 
+type Scope = 'singleton' | 'scoped' | 'transient';
+
 export interface Provider<T> {
-  instance?: T;
   factory: Factory<T>;
-  singleton: boolean;
+  scope: Scope;
+  instance?: T;
 }

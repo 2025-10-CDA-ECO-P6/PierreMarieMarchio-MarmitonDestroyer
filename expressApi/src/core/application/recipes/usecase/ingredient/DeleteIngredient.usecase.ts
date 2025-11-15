@@ -1,7 +1,6 @@
-import { IngredientRepository } from "../../../../domain/recipes/interfaces";
-import { NotFoundError } from "../../../common/exeptions";
-import { UseCase } from "../../../common/interfaces";
-
+import { IngredientRepository } from '../../../../domain/recipes/interfaces';
+import { NotFoundError } from '../../../common/exceptions';
+import { UseCase } from '../../../common/interfaces';
 
 export interface DeleteIngredientResponse {
   success: boolean;

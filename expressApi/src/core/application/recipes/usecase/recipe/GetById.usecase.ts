@@ -1,5 +1,5 @@
 import { RecipeRepository } from '../../../../domain/recipes/interfaces';
-import { NotFoundError } from '../../../common/exeptions';
+import { NotFoundError } from '../../../common/exceptions';
 import { UseCase } from '../../../common/interfaces';
 import { RecipeFullDTO } from '../../dto';
 

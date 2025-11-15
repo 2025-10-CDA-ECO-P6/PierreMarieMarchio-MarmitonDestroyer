@@ -1,4 +1,3 @@
-import { Query } from '../../core/application/common/dto';
 import {
   GetAllRecipesUseCase,
   GetRecipeByIdUseCase,
@@ -8,8 +7,8 @@ import {
 } from '../../core/application/recipes/usecase';
 import { container } from '../app';
 
-import { asyncHandler } from '../extensions/AsyncHandler.extension';
-import { queryParser } from '../utils/queryParser';
+import { asyncHandler } from '../common/utils/asyncHandler';
+import { queryParser } from '../common/utils/queryParser';
 
 export const getAllRecipesController = asyncHandler(async (req, res) => {
   const useCase = container.inject<GetAllRecipesUseCase>(

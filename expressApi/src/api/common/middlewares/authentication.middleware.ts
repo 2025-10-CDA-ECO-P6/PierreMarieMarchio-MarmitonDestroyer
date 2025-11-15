@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
+import { container } from '../../app';
+import { UserContextImpl } from '../contexts/UserContext';
+import { JWTService } from '../../../core/domain/auth/interfaces';
 
-import { container } from '../app';
-import { ExpressUserContext } from '../contexts/ExpressUserContext';
-import { AuthenticationError } from '../extensions/AuthenticationError.extension';
-import { JWTService } from '../../core/domain/auth/interfaces';
-
-export const authMiddleware = () => {
+export const authentication = () => {
   return async (req: Request, _res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader)
@@ -25,8 +23,7 @@ export const authMiddleware = () => {
 
       container.register(
         'UserContext',
-        () =>
-          new ExpressUserContext(payload.userId, payload.email, payload.name),
+        () => new UserContextImpl(payload.userId, payload.email, payload.name),
       );
 
       next();
@@ -35,3 +32,7 @@ export const authMiddleware = () => {
     }
   };
 };
+
+class AuthenticationError extends Error {
+  status = 401;
+}

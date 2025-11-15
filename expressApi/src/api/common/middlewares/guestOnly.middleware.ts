@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { container } from '../app';
-import { JWTService } from '../../core/domain/auth/interfaces';
+import { container } from '../../app';
+import { JWTService } from '../../../core/domain/auth/interfaces';
 
-
-export const guestOnlyMiddleware = () => {
+export const guestOnly = () => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
 

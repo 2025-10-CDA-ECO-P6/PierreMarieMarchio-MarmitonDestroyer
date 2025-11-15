@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { Recipe } from '../../../../domain/recipes/entities';
 import { RecipeRepository } from '../../../../domain/recipes/interfaces';
-import { ValidationError } from '../../../common/exeptions';
+import { ValidationError } from '../../../common/exceptions';
 import { UseCase } from '../../../common/interfaces';
 import { RecipeDTO, RecipeFullDTO } from '../../dto';
 

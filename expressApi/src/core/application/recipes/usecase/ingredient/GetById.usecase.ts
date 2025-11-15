@@ -1,8 +1,7 @@
-import { IngredientRepository } from "../../../../domain/recipes/interfaces";
-import { NotFoundError } from "../../../common/exeptions";
-import { UseCase } from "../../../common/interfaces";
-import { IngredientFullDTO } from "../../dto";
-
+import { IngredientRepository } from '../../../../domain/recipes/interfaces';
+import { NotFoundError } from '../../../common/exceptions';
+import { UseCase } from '../../../common/interfaces';
+import { IngredientFullDTO } from '../../dto';
 
 export interface GetIngredientByIdResponse {
   data: IngredientFullDTO | null;

@@ -5,13 +5,13 @@ import { registerAuthInfrastructureService } from '../infrastructure/auth/Servic
 import { registerRecipeDataInfrastructureService } from '../infrastructure/recipe-data/ServiceRegister';
 import { DIContainer } from '../shared/dependency-injection/DIContainer';
 import { registerCommonApplicationServices } from '../core/application/common/ServiceRegister';
-
-import { AppDbContext } from '../infrastructure/common/persistence/contexts/AppDbContext';
-import { RecipeDbContext } from '../infrastructure/recipe-data/persistence/contexts/RecipeDbContext';
-import { responseMiddleware } from './middlewares/response.middleware';
-import { errorMiddleware } from './middlewares/error.middleware';
 import { registerAuthApplicationServices } from '../core/application/auth/ServiceRegister';
 import { registerRecipeApplicationServices } from '../core/application/recipes/ServiceRegister';
+import { responseParser } from './common/middlewares/responseParser.middleware';
+import { DataBaseInit } from './extensions/Database.extension';
+import { errorParser } from './common/middlewares/errorParser.middleware';
+import { buildContainer } from './common/middlewares/buildContainer.middleware';
+import { registerCommonApiServices } from './common/ServiceRegistration';
 
 export const container = new DIContainer();
 
@@ -21,27 +21,20 @@ registerRecipeDataInfrastructureService(container);
 registerCommonApplicationServices(container);
 registerAuthApplicationServices(container);
 registerRecipeApplicationServices(container);
-
-const DBInit = async () => {
-  const appDbContext = container.inject<AppDbContext>('AppDbContext');
-  const RecipeDbContext = container.inject<RecipeDbContext>('RecipeDbContext');
-  await appDbContext.migrateAsync();
-};
-
-DBInit();
+registerCommonApiServices(container);
+DataBaseInit();
 
 const app = express();
-
+app.use(buildContainer(container));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
-
 app.use(express.json());
-app.use(responseMiddleware);
+app.use(responseParser);
 app.use('/api', routes);
-app.use(errorMiddleware);
+app.use(errorParser);
 
 export default app;

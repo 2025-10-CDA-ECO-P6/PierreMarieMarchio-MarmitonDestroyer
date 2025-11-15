@@ -1,8 +1,7 @@
-import { IngredientRepository } from "../../../../domain/recipes/interfaces";
-import { NotFoundError, ValidationError } from "../../../common/exeptions";
-import { UseCase } from "../../../common/interfaces";
-import { IngredientDTO, IngredientFullDTO } from "../../dto";
-
+import { IngredientRepository } from '../../../../domain/recipes/interfaces';
+import { NotFoundError, ValidationError } from '../../../common/exceptions';
+import { UseCase } from '../../../common/interfaces';
+import { IngredientDTO, IngredientFullDTO } from '../../dto';
 
 export interface UpdateIngredientRequest {
   id: string;

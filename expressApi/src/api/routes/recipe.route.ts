@@ -6,7 +6,7 @@ import {
   getRecipeByIdController,
   updateRecipeController,
 } from '../controllers';
-import { authMiddleware } from '../middlewares/auth.middleware';
+import { authentication } from '../common/middlewares/authentication.middleware';
 
 const recipesRouter = Router();
 

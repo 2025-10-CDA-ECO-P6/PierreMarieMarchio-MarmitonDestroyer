@@ -1,6 +1,6 @@
 import { UserRepository } from '../../../../domain/common/interfaces';
 import { UserFullDTO } from '../../dto';
-import { NotFoundError } from '../../exeptions';
+import { NotFoundError } from '../../exceptions';
 import { UseCase } from '../../interfaces';
 
 export interface GetUserByIdResponse {

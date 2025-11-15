@@ -6,7 +6,7 @@ import {
   DeleteUserUseCase,
 } from '../../core/application/common/usecase';
 import { container } from '../app';
-import { asyncHandler } from '../extensions/AsyncHandler.extension';
+import { asyncHandler } from '../common/utils/asyncHandler';
 
 export const getAllUsersController = asyncHandler(async (_req, res) => {
   const useCase = container.inject<GetAllUsersUseCase>('GetAllUsersUseCase');

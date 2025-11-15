@@ -1,7 +1,9 @@
-import { LoginUseCase, RegisterUseCase } from "../../core/application/auth/usecase";
-import { container } from "../app";
-import { asyncHandler } from "../extensions/AsyncHandler.extension";
-
+import {
+  LoginUseCase,
+  RegisterUseCase,
+} from '../../core/application/auth/usecase';
+import { container } from '../app';
+import { asyncHandler } from '../common/utils/asyncHandler';
 
 export const loginController = asyncHandler(async (req, res) => {
   const useCase = container.inject<LoginUseCase>('LoginUseCase');

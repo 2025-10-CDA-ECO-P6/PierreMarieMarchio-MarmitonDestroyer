@@ -1,6 +1,6 @@
 import { AuthService } from '../../../domain/auth/interfaces';
 import { UserFullDTO } from '../../common/dto';
-import { ValidationError, ConflictError } from '../../common/exeptions';
+import { ValidationError, ConflictError } from '../../common/exceptions';
 import { UseCase } from '../../common/interfaces';
 import { RegisterRequestDTO, RegisterResponseDTO } from '../dto';
 

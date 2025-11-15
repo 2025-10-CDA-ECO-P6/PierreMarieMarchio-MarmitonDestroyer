@@ -9,7 +9,7 @@ import {
   removeIngredientFromRecipeController,
   getIngredientByIdController,
 } from '../controllers';
-import { authMiddleware } from '../middlewares/auth.middleware';
+import { authentication } from '../common/middlewares/authentication.middleware';
 
 const ingredientsRouter = Router();
 

@@ -1,6 +1,6 @@
 import { AuthService } from '../../../domain/auth/interfaces';
 import { UserFullDTO } from '../../common/dto';
-import { ValidationError } from '../../common/exeptions';
+import { ValidationError } from '../../common/exceptions';
 import { UseCase } from '../../common/interfaces';
 import { LoginRequestDTO, LoginResponseDTO } from '../dto';
 

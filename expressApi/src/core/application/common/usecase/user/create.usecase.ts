@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { UserFullDTO } from '../../dto';
 import { UseCase } from '../../interfaces';
 import { UserRepository } from '../../../../domain/common/interfaces';
-import { ValidationError } from '../../exeptions';
+import { ValidationError } from '../../exceptions';
 
 export interface CreateUserRequest {
   name: string;

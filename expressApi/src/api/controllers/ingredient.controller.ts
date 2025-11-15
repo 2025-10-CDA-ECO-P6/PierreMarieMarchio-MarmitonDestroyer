@@ -7,7 +7,7 @@ import { GetIngredientsByRecipeUseCase } from '../../core/application/recipes/us
 import { RemoveIngredientFromRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/RemoveIngredientFromRecipe.usecase';
 import { UpdateIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/UpdateIngredient.usecase';
 import { container } from '../app';
-import { asyncHandler } from '../extensions/AsyncHandler.extension';
+import { asyncHandler } from '../common/utils/asyncHandler';
 
 export const createIngredientController = asyncHandler(async (req, res) => {
   const useCase = container.inject<CreateIngredientUseCase>(

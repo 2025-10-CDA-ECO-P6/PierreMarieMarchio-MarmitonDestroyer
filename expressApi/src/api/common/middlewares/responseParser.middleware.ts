@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-export const responseMiddleware = (
+export const responseParser = (
   req: Request,
   res: Response,
   next: NextFunction,
