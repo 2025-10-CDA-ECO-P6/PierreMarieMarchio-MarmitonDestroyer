@@ -5,6 +5,7 @@ import {
 import { QueryContext } from '../../../core/domain/common/interfaces';
 import { PaginatedResult } from '../../../core/domain/common/interfaces/contracts/pagination-result';
 import { DbContext } from '../../../shared/migration-system/DbContext';
+import { buildSqlFilter } from '../utils/buildSqlFilter';
 
 export class DocumentIdSQLiteRepository<T extends DocumentEntity>
   implements DocumentIdRepository<T>
@@ -28,7 +29,7 @@ export class DocumentIdSQLiteRepository<T extends DocumentEntity>
       documentId,
     );
     if (!row) return null;
-    return this.mapRowToEntity(row, populate ?? undefined);
+    return this.mapRowToEntity(row, populate);
   }
 
   async findAllByDocumentIds(
@@ -42,37 +43,34 @@ export class DocumentIdSQLiteRepository<T extends DocumentEntity>
     const { limit, offset, filters, sort } = ctx.getOrNull();
     const populate = ctx.getPopulate() ?? undefined;
 
-    const inPlaceholders = documentIds.map(() => '?').join(', ');
-    const whereFilters = filters
-      ? 'AND ' +
-        Object.keys(filters)
-          .map((f) => `${f} = ?`)
-          .join(' AND ')
-      : '';
+    let where = `WHERE documentId IN (${documentIds.map(() => '?').join(', ')})`;
+    const values: any[] = [...documentIds];
+
+    if (filters) {
+      const clauses = [];
+
+      for (const key of Object.keys(filters)) {
+        const [field, op] = key.split('__');
+        const { sql, value } = buildSqlFilter(field, op, filters[key]);
+        clauses.push(sql);
+        values.push(value);
+      }
+
+      if (clauses.length) where += ` AND ${clauses.join(' AND ')}`;
+    }
 
     const order = sort ? `ORDER BY ${sort.field} ${sort.order}` : '';
     const limitClause = limit ? `LIMIT ${limit}` : '';
     const offsetClause = offset ? `OFFSET ${offset}` : '';
 
-    const filterValues = filters ? Object.values(filters) : [];
-
     const rows = await this.db.all(
-      `SELECT * FROM ${this.tableName}
-       WHERE documentId IN (${inPlaceholders})
-       ${whereFilters}
-       ${order}
-       ${limitClause}
-       ${offsetClause}`,
-      ...documentIds,
-      ...filterValues,
+      `SELECT * FROM ${this.tableName} ${where} ${order} ${limitClause} ${offsetClause}`,
+      ...values,
     );
 
     const totalRow = await this.db.get(
-      `SELECT COUNT(*) as total FROM ${this.tableName}
-       WHERE documentId IN (${inPlaceholders})
-       ${whereFilters}`,
-      ...documentIds,
-      ...filterValues,
+      `SELECT COUNT(*) as total FROM ${this.tableName} ${where}`,
+      ...values,
     );
 
     return {

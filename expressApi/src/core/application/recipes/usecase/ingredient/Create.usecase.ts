@@ -9,18 +9,25 @@ export interface CreateIngredientResponse {
   data: IngredientFullDTO;
 }
 
+export interface CreateIngredientRequest {
+  data: IngredientDTO;
+}
+
 export class CreateIngredientUseCase
-  implements UseCase<IngredientDTO, CreateIngredientResponse>
+  implements UseCase<CreateIngredientRequest, CreateIngredientResponse>
 {
   constructor(private readonly ingredientRepo: IngredientRepository) {}
 
-  async execute(request: IngredientDTO): Promise<CreateIngredientResponse> {
-    if (!request.name) throw new ValidationError('Ingredient name is required');
+  async execute(
+    request: CreateIngredientRequest,
+  ): Promise<CreateIngredientResponse> {
+    if (!request.data.name)
+      throw new ValidationError('Ingredient name is required');
 
     const ingredient = new Ingredient(
       randomUUID(),
-      request.documentId ?? randomUUID(),
-      request.name,
+      request.data.documentId ?? randomUUID(),
+      request.data.name,
       new Date(),
       new Date(),
     );

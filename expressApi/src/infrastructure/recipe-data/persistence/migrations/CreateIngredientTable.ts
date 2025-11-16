@@ -6,7 +6,11 @@ export const CreateIngredientTable: Migration = {
     await db.exec(`
       CREATE TABLE IF NOT EXISTS ingredients (
         id TEXT PRIMARY KEY,
-        name TEXT NOT NULL
+        documentId TEXT NOT NULL,
+        name TEXT NOT NULL,
+        createdAt TEXT NOT NULL,
+        updatedAt TEXT NOT NULL,
+        publishedAt TEXT
       );
     `);
 

@@ -5,6 +5,7 @@ import {
 import { QueryContext } from '../../../core/domain/common/interfaces';
 import { PaginatedResult } from '../../../core/domain/common/interfaces/contracts/pagination-result';
 import { DbContext } from '../../../shared/migration-system/DbContext';
+import { buildSqlFilter } from '../utils/buildSqlFilter';
 
 export abstract class ManyToManySQLiteRepository<
   L extends BaseEntity,
@@ -49,38 +50,39 @@ export abstract class ManyToManySQLiteRepository<
     const { limit, offset, filters, sort } = ctx.getOrNull();
     const populate = ctx.getPopulate() ?? undefined;
 
-    const whereFilters = filters
-      ? 'AND ' +
-        Object.keys(filters)
-          .map((f) => `r.${f} = ?`)
-          .join(' AND ')
-      : '';
+    let where = `WHERE t.${this.leftIdColumn} = ?`;
+    const values: any[] = [leftId];
+
+    if (filters) {
+      const clauses = [];
+      for (const key of Object.keys(filters)) {
+        const [field, op] = key.split('__');
+        const { sql, value } = buildSqlFilter(`r.${field}`, op, filters[key]);
+        clauses.push(sql);
+        values.push(value);
+      }
+      if (clauses.length) where += ` AND ${clauses.join(' AND ')}`;
+    }
 
     const order = sort ? `ORDER BY r.${sort.field} ${sort.order}` : '';
     const limitClause = limit ? `LIMIT ${limit}` : '';
     const offsetClause = offset ? `OFFSET ${offset}` : '';
 
-    const filterValues = filters ? Object.values(filters) : [];
-
     const rows = await this.db.all(
       `SELECT r.* FROM ${this.rightTable} r
        INNER JOIN ${this.tableName} t ON t.${this.rightIdColumn} = r.id
-       WHERE t.${this.leftIdColumn} = ?
-       ${whereFilters}
+       ${where}
        ${order}
        ${limitClause}
        ${offsetClause}`,
-      leftId,
-      ...filterValues,
+      ...values,
     );
 
     const totalRow = await this.db.get(
       `SELECT COUNT(*) as total FROM ${this.rightTable} r
        INNER JOIN ${this.tableName} t ON t.${this.rightIdColumn} = r.id
-       WHERE t.${this.leftIdColumn} = ?
-       ${whereFilters}`,
-      leftId,
-      ...filterValues,
+       ${where}`,
+      ...values,
     );
 
     return {
@@ -98,38 +100,39 @@ export abstract class ManyToManySQLiteRepository<
     const { limit, offset, filters, sort } = ctx.getOrNull();
     const populate = ctx.getPopulate() ?? undefined;
 
-    const whereFilters = filters
-      ? 'AND ' +
-        Object.keys(filters)
-          .map((f) => `l.${f} = ?`)
-          .join(' AND ')
-      : '';
+    let where = `WHERE t.${this.rightIdColumn} = ?`;
+    const values: any[] = [rightId];
+
+    if (filters) {
+      const clauses = [];
+      for (const key of Object.keys(filters)) {
+        const [field, op] = key.split('__');
+        const { sql, value } = buildSqlFilter(`l.${field}`, op, filters[key]);
+        clauses.push(sql);
+        values.push(value);
+      }
+      if (clauses.length) where += ` AND ${clauses.join(' AND ')}`;
+    }
 
     const order = sort ? `ORDER BY l.${sort.field} ${sort.order}` : '';
     const limitClause = limit ? `LIMIT ${limit}` : '';
     const offsetClause = offset ? `OFFSET ${offset}` : '';
 
-    const filterValues = filters ? Object.values(filters) : [];
-
     const rows = await this.db.all(
       `SELECT l.* FROM ${this.leftTable} l
        INNER JOIN ${this.tableName} t ON t.${this.leftIdColumn} = l.id
-       WHERE t.${this.rightIdColumn} = ?
-       ${whereFilters}
+       ${where}
        ${order}
        ${limitClause}
        ${offsetClause}`,
-      rightId,
-      ...filterValues,
+      ...values,
     );
 
     const totalRow = await this.db.get(
       `SELECT COUNT(*) as total FROM ${this.leftTable} l
        INNER JOIN ${this.tableName} t ON t.${this.leftIdColumn} = l.id
-       WHERE t.${this.rightIdColumn} = ?
-       ${whereFilters}`,
-      rightId,
-      ...filterValues,
+       ${where}`,
+      ...values,
     );
 
     return {

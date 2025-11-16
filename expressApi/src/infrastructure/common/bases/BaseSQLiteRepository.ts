@@ -2,6 +2,7 @@ import { BaseEntity, BaseRepository } from '../../../core/domain/common/bases';
 import { QueryContext } from '../../../core/domain/common/interfaces';
 import { PaginatedResult } from '../../../core/domain/common/interfaces/contracts/pagination-result';
 import { DbContext } from '../../../shared/migration-system/DbContext';
+import { buildSqlFilter } from '../utils/buildSqlFilter';
 
 export abstract class BaseSQLiteRepository<T extends BaseEntity>
   implements BaseRepository<T>
@@ -14,17 +15,24 @@ export abstract class BaseSQLiteRepository<T extends BaseEntity>
     return this.context.getDb();
   }
 
+  protected getInsertableKeys(entity: T): string[] {
+    return Object.keys(entity).filter((k) => {
+      const value = (entity as any)[k];
+      return value !== undefined && value !== null && !Array.isArray(value);
+    });
+  }
+
   async create(entity: T): Promise<void> {
-    const keys = Object.keys(entity).join(', ');
-    const placeholders = Object.keys(entity)
-      .map(() => '?')
-      .join(', ');
-    const values = Object.values(entity).map((v) =>
-      v instanceof Date ? v.toISOString() : v,
-    );
+    const keys = this.getInsertableKeys(entity);
+    const columns = keys.join(', ');
+    const placeholders = keys.map(() => '?').join(', ');
+    const values = keys.map((k) => {
+      const v = (entity as any)[k];
+      return v instanceof Date ? v.toISOString() : v;
+    });
 
     await this.db.run(
-      `INSERT INTO ${this.tableName} (${keys}) VALUES (${placeholders})`,
+      `INSERT INTO ${this.tableName} (${columns}) VALUES (${placeholders})`,
       ...values,
     );
   }
@@ -40,34 +48,38 @@ export abstract class BaseSQLiteRepository<T extends BaseEntity>
 
   async findAll(ctx: QueryContext): Promise<PaginatedResult<T>> {
     const { limit, offset, filters, sort } = ctx.getOrNull();
+    const populate = ctx.getPopulate() ?? undefined;
 
-    const where = filters
-      ? 'WHERE ' +
-        Object.keys(filters)
-          .map((k) => `${k} = ?`)
-          .join(' AND ')
-      : '';
+    let where = '';
+    const values: any[] = [];
+
+    if (filters) {
+      const clauses = [];
+      for (const key of Object.keys(filters)) {
+        const [field, op] = key.split('__');
+        const { sql, value } = buildSqlFilter(field, op, filters[key]);
+        clauses.push(sql);
+        values.push(value);
+      }
+      if (clauses.length) where = `WHERE ${clauses.join(' AND ')}`;
+    }
 
     const order = sort ? `ORDER BY ${sort.field} ${sort.order}` : '';
     const limitClause = limit ? `LIMIT ${limit}` : '';
     const offsetClause = offset ? `OFFSET ${offset}` : '';
 
-    const filterValues = filters ? Object.values(filters) : [];
-
     const rows = await this.db.all(
       `SELECT * FROM ${this.tableName} ${where} ${order} ${limitClause} ${offsetClause}`,
-      ...filterValues,
+      ...values,
     );
 
     const totalRow = await this.db.get(
       `SELECT COUNT(*) as total FROM ${this.tableName} ${where}`,
-      ...filterValues,
+      ...values,
     );
 
     return {
-      items: rows.map((r) =>
-        this.mapRowToEntity(r, ctx.getPopulate() ?? undefined),
-      ),
+      items: rows.map((r) => this.mapRowToEntity(r, populate)),
       total: totalRow.total,
       limit: limit ?? 0,
       offset: offset ?? 0,
@@ -75,7 +87,7 @@ export abstract class BaseSQLiteRepository<T extends BaseEntity>
   }
 
   async update(entity: T): Promise<void> {
-    const keys = Object.keys(entity).filter((k) => k !== 'id');
+    const keys = this.getInsertableKeys(entity).filter((k) => k !== 'id');
     const setClause = keys.map((k) => `${k} = ?`).join(', ');
     const values = keys.map((k) => {
       const v = (entity as any)[k];

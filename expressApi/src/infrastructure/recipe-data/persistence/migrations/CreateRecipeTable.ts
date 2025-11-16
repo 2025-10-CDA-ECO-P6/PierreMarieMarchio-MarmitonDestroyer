@@ -6,9 +6,9 @@ export const CreateRecipeTableMigration: Migration = {
     await db.exec(`
     CREATE TABLE IF NOT EXISTS recipes (
       id TEXT PRIMARY KEY,
-      Title TEXT NOT NULL,
-      preparation_time INTEGER NOT NULL,
-      dificulty INTEGER NOT NULL,
+      title TEXT NOT NULL,
+      preparationTime INTEGER NOT NULL,
+      difficulty INTEGER NOT NULL,
       budget INTEGER NOT NULL,
       description TEXT
     )

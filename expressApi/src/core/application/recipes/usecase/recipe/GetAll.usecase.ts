@@ -37,9 +37,9 @@ export class GetAllRecipesUseCase
     return {
       id: recipe.id,
       documentId: recipe.documentId,
-      Title: recipe.title,
-      preparation_time: recipe.preparationTime,
-      dificulty: recipe.difficulty,
+      title: recipe.title,
+      preparationTime: recipe.preparationTime,
+      difficulty: recipe.difficulty,
       budget: recipe.budget,
       description: recipe.description,
       createdAt: recipe.createdAt,

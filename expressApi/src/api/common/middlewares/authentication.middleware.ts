@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { container } from '../../app';
-import { UserContextImpl } from '../contexts/UserContext';
 import { JWTService } from '../../../core/domain/auth/interfaces';
 import { AuthenticationError } from '../../../core/application/common/exceptions';
+import { UserContext } from '../../../core/domain/common/interfaces';
 
 export const authentication = () => {
   return async (req: Request, _res: Response, next: NextFunction) => {
@@ -15,17 +14,18 @@ export const authentication = () => {
       throw new AuthenticationError('Invalid authorization header format');
 
     try {
-      const jwtService = container.inject<JWTService>('JWTService');
+      const jwtService = req.container.inject<JWTService>('JWTService');
       const payload = jwtService.verify<{
         userId: string;
         email: string;
         name: string;
       }>(token);
 
-      container.register(
-        'UserContext',
-        () => new UserContextImpl(payload.userId, payload.email, payload.name),
-      );
+      const userContext = req.container.inject<UserContext>('UserContext');
+
+      userContext.setUserId(payload.userId);
+      userContext.setEmail(payload.email);
+      userContext.setName(payload.name);
 
       next();
     } catch {
@@ -33,4 +33,3 @@ export const authentication = () => {
     }
   };
 };
-

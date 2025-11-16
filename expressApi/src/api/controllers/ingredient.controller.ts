@@ -1,51 +1,60 @@
-import { GetIngredientByIdUseCase } from '../../core/application/recipes/usecase';
 import { AddIngredientRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/AddIngredientRecipe.usecase';
 import { CreateIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/Create.usecase';
 import { DeleteIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/Delete.usecase';
 import { GetAllIngredientsUseCase } from '../../core/application/recipes/usecase/ingredient/GetAll.usecase';
-import { GetIngredientsByRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/GetIngredientsByRecipe.usecase';
+import { GetIngredientByIdUseCase } from '../../core/application/recipes/usecase/ingredient/GetById.usecase';
 import { RemoveIngredientRecipeUseCase } from '../../core/application/recipes/usecase/ingredient/RemoveIngredientRecipe.usecase';
 import { UpdateIngredientUseCase } from '../../core/application/recipes/usecase/ingredient/Update.usecase';
-import { container } from '../app';
+import { QueryContext } from '../../core/domain/common/interfaces';
 import { asyncHandler } from '../common/utils/asyncHandler';
+import { queryParser } from '../common/utils/queryParser';
 
-export const createIngredientController = asyncHandler(async (req, res) => {
-  const useCase = container.inject<CreateIngredientUseCase>(
-    'CreateIngredientUseCase',
+export const getAllIngredientsController = asyncHandler(async (req, res) => {
+  const useCase = req.container.inject<GetAllIngredientsUseCase>(
+    'GetAllIngredientsUseCase',
   );
-  const response = await useCase.execute(req.body.data);
-  res.status(201).json(response);
+  const ctx = req.container.inject<QueryContext>('QueryContext');
+  ctx.apply(queryParser(req.query));
+
+  const response = await useCase.execute(ctx);
+  res.json(response);
 });
 
 export const getIngredientByIdController = asyncHandler(async (req, res) => {
-  const useCase = container.inject<GetIngredientByIdUseCase>(
+  const useCase = req.container.inject<GetIngredientByIdUseCase>(
     'GetIngredientByIdUseCase',
   );
-  const response = await useCase.execute(req.params.id);
+  const ctx = req.container.inject<QueryContext>('QueryContext');
+  ctx.apply(queryParser(req.query));
+
+  const response = await useCase.execute({
+    id: req.params.id,
+    ctx,
+  });
   res.json(response);
 });
 
-export const getAllIngredientsController = asyncHandler(async (_req, res) => {
-  const useCase = container.inject<GetAllIngredientsUseCase>(
-    'GetAllIngredientsUseCase',
+export const createIngredientController = asyncHandler(async (req, res) => {
+  const useCase = req.container.inject<CreateIngredientUseCase>(
+    'CreateIngredientUseCase',
   );
-  const response = await useCase.execute();
-  res.json(response);
+  const response = await useCase.execute(req.body);
+  res.status(201).json(response);
 });
 
 export const updateIngredientController = asyncHandler(async (req, res) => {
-  const useCase = container.inject<UpdateIngredientUseCase>(
+  const useCase = req.container.inject<UpdateIngredientUseCase>(
     'UpdateIngredientUseCase',
   );
   const response = await useCase.execute({
     id: req.params.id,
-    data: req.body.data,
+    data: req.body,
   });
   res.json(response);
 });
 
 export const deleteIngredientController = asyncHandler(async (req, res) => {
-  const useCase = container.inject<DeleteIngredientUseCase>(
+  const useCase = req.container.inject<DeleteIngredientUseCase>(
     'DeleteIngredientUseCase',
   );
   const response = await useCase.execute(req.params.id);
@@ -54,8 +63,8 @@ export const deleteIngredientController = asyncHandler(async (req, res) => {
 
 export const addIngredientToRecipeController = asyncHandler(
   async (req, res) => {
-    const useCase = container.inject<AddIngredientRecipeUseCase>(
-      'AddIngredientToRecipeUseCase',
+    const useCase = req.container.inject<AddIngredientRecipeUseCase>(
+      'AddIngredientRecipeUseCase',
     );
     const response = await useCase.execute({
       recipeId: req.params.recipeId,
@@ -67,23 +76,13 @@ export const addIngredientToRecipeController = asyncHandler(
 
 export const removeIngredientFromRecipeController = asyncHandler(
   async (req, res) => {
-    const useCase = container.inject<RemoveIngredientRecipeUseCase>(
-      'RemoveIngredientFromRecipeUseCase',
+    const useCase = req.container.inject<RemoveIngredientRecipeUseCase>(
+      'RemoveRecipeIngredientUseCase',
     );
     const response = await useCase.execute({
       recipeId: req.params.recipeId,
       ingredientId: req.params.ingredientId,
     });
-    res.json(response);
-  },
-);
-
-export const getIngredientsByRecipeController = asyncHandler(
-  async (req, res) => {
-    const useCase = container.inject<GetIngredientsByRecipeUseCase>(
-      'GetIngredientsByRecipeUseCase',
-    );
-    const response = await useCase.execute(req.params.recipeId);
     res.json(response);
   },
 );

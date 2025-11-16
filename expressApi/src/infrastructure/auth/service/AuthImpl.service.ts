@@ -33,7 +33,7 @@ export class AuthServiceImpl implements AuthService {
     password: string;
   }): Promise<{ token: string; user: User }> {
     const existing = await this.authRepo.findByEmail(request.email);
-    if (existing) throw new Error('Email already used');
+    if (existing) throw new Error('Email not valid');
 
     const hashedPassword = await bcrypt.hash(request.password, 10);
 

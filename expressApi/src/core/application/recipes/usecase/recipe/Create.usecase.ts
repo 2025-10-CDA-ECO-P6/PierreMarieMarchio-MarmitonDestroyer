@@ -19,16 +19,17 @@ export class CreateRecipeUseCase
   constructor(private readonly recipeRepo: RecipeRepository) {}
 
   async execute(recipe: CreateRecipeRequest): Promise<CreateRecipeResponse> {
-    if (!recipe.data.Title || !recipe.data.description) {
+
+    if (!recipe.data.title || !recipe.data.description) {
       throw new ValidationError('Title and description are required');
     }
 
     const newRecipe = new Recipe(
       randomUUID(),
       randomUUID(),
-      recipe.data.Title,
-      recipe.data.preparation_time,
-      recipe.data.dificulty,
+      recipe.data.title,
+      recipe.data.preparationTime,
+      recipe.data.difficulty,
       recipe.data.budget,
       recipe.data.description,
       new Date(),
@@ -47,9 +48,9 @@ export class CreateRecipeUseCase
     return {
       id: recipe.id,
       documentId: recipe.documentId,
-      Title: recipe.title,
-      preparation_time: recipe.preparationTime,
-      dificulty: recipe.difficulty,
+      title: recipe.title,
+      preparationTime: recipe.preparationTime,
+      difficulty: recipe.difficulty,
       budget: recipe.budget,
       description: recipe.description,
       createdAt: recipe.createdAt,

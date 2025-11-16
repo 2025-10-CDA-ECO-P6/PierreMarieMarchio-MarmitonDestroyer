@@ -1,14 +1,21 @@
 export const queryParser = (raw: Record<string, any>) => {
+  const page = Number(raw['pagination[page]'] ?? 1);
+  const pageSize = Number(raw['pagination[pageSize]'] ?? 25);
+
   const pagination = {
-    page: raw['pagination[page]'] ? Number(raw['pagination[page]']) : 1,
-    pageSize: raw['pagination[pageSize]']
-      ? Number(raw['pagination[pageSize]'])
-      : 25,
+    limit: pageSize,
+    offset: (page - 1) * pageSize,
   };
 
-  const filters = {
-    titleContains: raw['filters[Title][$contains]'] || undefined,
-  };
+  const filters: Record<string, any> = {};
+  Object.keys(raw).forEach((key) => {
+    const match = key.match(/^filters\[(.+?)\]\[(.+?)\]$/);
+    if (match) {
+      const field = match[1];
+      const op = match[2];
+      filters[`${field}__${op}`] = raw[key];
+    }
+  });
 
   const sort = raw.sort
     ? (() => {
@@ -18,9 +25,6 @@ export const queryParser = (raw: Record<string, any>) => {
     : undefined;
 
   const populate = raw.populate === '*' ? true : false;
-
-  console.log(populate);
-  
 
   return { pagination, filters, sort, populate };
 };

@@ -14,6 +14,13 @@ export interface QueryContext {
   setPopulate(populate: boolean): void;
   getPopulate(): boolean | null;
 
+  apply(parsed: {
+    pagination: { limit?: number; offset?: number };
+    filters?: Record<string, any>;
+    sort?: { field: string; order: 'asc' | 'desc' };
+    populate?: boolean;
+  }): void;
+
   getOrNull(): {
     limit: number | null;
     offset: number | null;

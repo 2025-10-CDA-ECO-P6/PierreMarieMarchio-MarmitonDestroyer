@@ -17,7 +17,6 @@ export {
   deleteIngredientController,
   updateIngredientController,
   getAllIngredientsController,
-  getIngredientsByRecipeController,
   addIngredientToRecipeController,
   removeIngredientFromRecipeController,
   getIngredientByIdController,

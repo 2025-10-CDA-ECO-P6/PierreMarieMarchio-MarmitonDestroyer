@@ -2,9 +2,9 @@ import { IngredientFullDTO } from './IngredientDTO';
 
 export interface RecipeDTO {
   documentId?: string;
-  Title: string;
-  preparation_time: number;
-  dificulty: number;
+  title: string;
+  preparationTime: number;
+  difficulty: number;
   budget: number;
   description: string;
   createdAt?: Date;

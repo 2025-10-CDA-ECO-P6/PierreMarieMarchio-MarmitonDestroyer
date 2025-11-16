@@ -4,7 +4,6 @@ import {
   getAllIngredientsController,
   updateIngredientController,
   deleteIngredientController,
-  getIngredientsByRecipeController,
   addIngredientToRecipeController,
   removeIngredientFromRecipeController,
   getIngredientByIdController,
@@ -15,8 +14,6 @@ const ingredientsRouter = Router();
 
 // Disabled for rendre test
 // ingredientsRouter.use(authMiddleware());
-
-ingredientsRouter.get('/recipe/:recipeId', getIngredientsByRecipeController);
 
 ingredientsRouter.post('/', createIngredientController);
 ingredientsRouter.get('/', getAllIngredientsController);
